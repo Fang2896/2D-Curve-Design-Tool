@@ -31,7 +31,9 @@ add_executable(
         Sources/OGLManager.cpp
         Sources/Headers/OGLManager.h
         Sources/Headers/Grid.h
-        ${QRC_SOURCE_FILES})
+        ${QRC_SOURCE_FILES}
+        Sources/Points.cpp
+        Sources/Headers/Points.h Sources/Shader.cpp Sources/Headers/Shader.h)
 
 target_link_libraries(HW1
         Qt5::Core

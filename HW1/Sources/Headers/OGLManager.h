@@ -6,6 +6,8 @@
 #define HW1_OGLMANAGER_H
 
 #include <QVector2D>
+#include <QVector3D>
+#include <QMatrix4x4>
 
 #include <QDebug>
 #include <QOpenGLWidget>
@@ -17,6 +19,8 @@
 
 #include <QKeyEvent>
 #include <QMouseEvent>
+
+#include "Shader.h"
 
 
 class OGLManager : public QOpenGLWidget {
@@ -37,15 +41,9 @@ protected:
     void paintGL() override;
 
 private:
-    QOpenGLFunctions_3_3_Core *core{};
-    QOpenGLShaderProgram *pointShaderProgram;
-    QOpenGLShaderProgram *gridShaderProgram;
+    QOpenGLFunctions_3_3_Core *core;
 
-    QOpenGLVertexArrayObject pointVAO;
-    QOpenGLBuffer pointVBO{QOpenGLBuffer::VertexBuffer};
-
-    QVector<QVector2D> points;
-
+    std::unique_ptr<Shader> pointShader;
 
 };
 

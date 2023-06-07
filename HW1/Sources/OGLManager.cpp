@@ -3,6 +3,9 @@
 //
 
 #include "OGLManager.h"
+#include "Points.h"
+
+std::unique_ptr<Points> points;
 
 
 OGLManager::OGLManager(QWidget *parent, int width, int height)
@@ -25,14 +28,7 @@ void OGLManager::mousePressEvent(QMouseEvent *event) {
     auto normalX = spaceX / (float)width();
     auto normalY = spaceY / (float)height();
 
-    points.push_back({normalX, normalY});
-
-    // Update VBO
-    pointVAO.bind();
-    pointVBO.bind();
-    pointVBO.allocate(points.data(), points.size() * sizeof(QVector2D));
-    pointVAO.release();
-
+    points->addPoint({normalX, normalY});
     qDebug() << "x: " << spaceX << "y: " << spaceY << Qt::endl;
 
     update();
@@ -42,29 +38,21 @@ void OGLManager::mouseReleaseEvent(QMouseEvent *event) {
 
 }
 
-
 /***** GL Functions *****/
 void OGLManager::initializeGL() {
     core = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_3_Core>();
     core->glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     core->glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
-    // initialize shader program
-    bool success;
-    pointShaderProgram = new QOpenGLShaderProgram(this);
-    pointShaderProgram->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Resources/Shaders/point.vert");
-    pointShaderProgram->addShaderFromSourceFile(QOpenGLShader::Fragment,":/Resources/Shaders/point.frag");
-    success = pointShaderProgram->link();
-    if(!success) qDebug() << "Point Shader Link Error!" << Qt::endl;
+    // initialize Objects
+    points = std::make_unique<Points>();
+    points->init();
 
-    // initialize VAO / VBO
-    pointVAO.create();
-    pointVAO.bind();
-    pointVBO.create();
-    pointVBO.bind();
-    pointShaderProgram->enableAttributeArray(0);
-    pointShaderProgram->setAttributeBuffer(0, GL_FLOAT, 0, 2);
-    pointVAO.release();
+    // initialize shader program
+    pointShader = std::make_unique<Shader>(this);
+    pointShader->compile(":/Resources/Shaders/point.vert", ":/Resources/Shaders/point.frag");
+
+    // TODO: 可不可以用MVP矩阵来操作？ 增加一个缩放功能？
 
 }
 
@@ -76,15 +64,13 @@ void OGLManager::paintGL() {
     core->glClear(GL_COLOR_BUFFER_BIT);
 
     // Point Draw
-    pointShaderProgram->bind();
-    pointVAO.bind();
-    core->glDrawArrays(GL_POINTS, 0, points.size());
-    pointVAO.release();
-    pointShaderProgram->release();
+    pointShader->use();
+    points->drawPoints();
+    pointShader->release();
 }
 
 void OGLManager::clearCanvas() {
-    points.clear();
+    points->clearData();
     update();
 }
 
