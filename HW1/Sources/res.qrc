@@ -4,5 +4,7 @@
         <file>Resources/Shaders/point.frag</file>
         <file>Resources/Shaders/grid.vert</file>
         <file>Resources/Shaders/grid.frag</file>
+        <file>Resources/Shaders/curve.vert</file>
+        <file>Resources/Shaders/curve.frag</file>
     </qresource>
 </RCC>

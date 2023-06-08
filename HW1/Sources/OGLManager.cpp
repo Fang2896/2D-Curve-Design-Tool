@@ -5,6 +5,7 @@
 #include "OGLManager.h"
 #include "Points.h"
 #include "Grid.h"
+#include "Curve.h"
 
 std::unique_ptr<Points> points;
 std::unique_ptr<Grid> grid;
@@ -62,6 +63,10 @@ void OGLManager::initializeGL() {
     gridShader->compile(":/Resources/Shaders/grid.vert",
                         ":/Resources/Shaders/grid.frag");
 
+    curveShader = std::make_unique<Shader>(this);
+    curveShader->compile(":/Resources/Shaders/curve.vert",
+                        ":/Resources/Shaders/curve.frag");
+
     // TODO: 可不可以用MVP矩阵来操作？ 增加一个缩放功能？
 
 }
@@ -86,13 +91,6 @@ void OGLManager::paintGL() {
 void OGLManager::clearCanvas() {
     points->clearData();
     update();
-}
-
-
-
-// After points has been added or delete, reDraw all curve
-void OGLManager::updateAllCurve(QVector2D *data, int n) {
-
 }
 
 

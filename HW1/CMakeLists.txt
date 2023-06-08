@@ -37,7 +37,9 @@ add_executable(
         Sources/Shader.cpp
         Sources/Headers/Shader.h
         Sources/Grid.cpp
-        Sources/Headers/Grid.h Sources/CurveAlgorithms.cpp Sources/Headers/CurveAlgorithms.h)
+        Sources/Headers/Grid.h
+        Sources/Curve.cpp
+        Sources/Headers/Curve.h)
 
 target_link_libraries(HW1
         Qt5::Core

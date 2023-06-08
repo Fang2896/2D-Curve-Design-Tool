@@ -46,6 +46,7 @@ private:
 
     std::unique_ptr<Shader> pointShader;
     std::unique_ptr<Shader> gridShader;
+    std::unique_ptr<Shader> curveShader;
 
 
 };
