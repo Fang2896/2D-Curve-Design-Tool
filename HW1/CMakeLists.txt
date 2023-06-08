@@ -33,7 +33,11 @@ add_executable(
         Sources/Headers/Grid.h
         ${QRC_SOURCE_FILES}
         Sources/Points.cpp
-        Sources/Headers/Points.h Sources/Shader.cpp Sources/Headers/Shader.h)
+        Sources/Headers/Points.h
+        Sources/Shader.cpp
+        Sources/Headers/Shader.h
+        Sources/Grid.cpp
+        Sources/Headers/Grid.h Sources/CurveAlgorithms.cpp Sources/Headers/CurveAlgorithms.h)
 
 target_link_libraries(HW1
         Qt5::Core

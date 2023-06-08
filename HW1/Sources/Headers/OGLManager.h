@@ -30,6 +30,7 @@ public:
 
     // data functions
     void clearCanvas();
+    void updateAllCurve(QVector2D *data, int n);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -44,6 +45,8 @@ private:
     QOpenGLFunctions_3_3_Core *core;
 
     std::unique_ptr<Shader> pointShader;
+    std::unique_ptr<Shader> gridShader;
+
 
 };
 

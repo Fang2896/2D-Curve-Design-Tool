@@ -5,31 +5,27 @@
 #ifndef HW1_GRID_H
 #define HW1_GRID_H
 
-#include <QVector>
 #include <QVector2D>
-#include <QOpenGLBuffer>
 #include <QOpenGLFunctions_3_3_Core>
 
 
 class Grid
 {
 public:
-    explicit Grid(int glWidth, int glHeight);
-    ~Grid() = default;
+    explicit Grid(int w, int h);
+    ~Grid();
 
     void init();
     void drawGrid();
 
 private:
-    int xRange; // [-xRange, xRange]
-    int yRange; // [-yRange, yRange]
+    int width, height;
 
     QOpenGLFunctions_3_3_Core *core;
-    QOpenGLBuffer gridVBO{QOpenGLBuffer::VertexBuffer};
+    GLuint gridVBO;
 
-    QVector<QVector2D> gridPoints;
-    QVector<QVector2D> gridNormalPoints;
-
+    QVector<QVector2D> data;
+    QVector<QVector2D> normalizedData;
 };
 
 

@@ -4,8 +4,10 @@
 
 #include "OGLManager.h"
 #include "Points.h"
+#include "Grid.h"
 
 std::unique_ptr<Points> points;
+std::unique_ptr<Grid> grid;
 
 
 OGLManager::OGLManager(QWidget *parent, int width, int height)
@@ -48,9 +50,17 @@ void OGLManager::initializeGL() {
     points = std::make_unique<Points>();
     points->init();
 
+    grid = std::make_unique<Grid>(width(), height());
+    grid->init();
+
     // initialize shader program
     pointShader = std::make_unique<Shader>(this);
-    pointShader->compile(":/Resources/Shaders/point.vert", ":/Resources/Shaders/point.frag");
+    pointShader->compile(":/Resources/Shaders/point.vert",
+                         ":/Resources/Shaders/point.frag");
+
+    gridShader = std::make_unique<Shader>(this);
+    gridShader->compile(":/Resources/Shaders/grid.vert",
+                        ":/Resources/Shaders/grid.frag");
 
     // TODO: 可不可以用MVP矩阵来操作？ 增加一个缩放功能？
 
@@ -67,12 +77,25 @@ void OGLManager::paintGL() {
     pointShader->use();
     points->drawPoints();
     pointShader->release();
+
+    gridShader->use();
+    grid->drawGrid();
+    gridShader->release();
 }
 
 void OGLManager::clearCanvas() {
     points->clearData();
     update();
 }
+
+
+
+// After points has been added or delete, reDraw all curve
+void OGLManager::updateAllCurve(QVector2D *data, int n) {
+
+}
+
+
 
 
 
