@@ -56,7 +56,7 @@ void OGLManager::initializeGL() {
     grid->init();
 
     polyfitCurve = std::make_unique<PolynomialFittingCurve>();
-    polyfitCurve->init(40, width(), height());
+    polyfitCurve->init(100, width(), height());
 
     // initialize shader program
     pointShader = std::make_unique<Shader>(this);
@@ -81,6 +81,8 @@ void OGLManager::initializeGL() {
 
 void OGLManager::resizeGL(int w, int h) {
     core->glViewport(0, 0, w, h);
+    polyfitCurve->setWigetSize(w, h);
+    update();
 }
 
 void OGLManager::paintGL() {
@@ -88,7 +90,8 @@ void OGLManager::paintGL() {
 
     QMatrix4x4 projection, view;
     view.setToIdentity();
-    projection.ortho(-400.0f, 400.0f, -200.0f, 200.0f, -1.0f, 1.0f);
+    projection.ortho(-(float)width() / 2.0f, (float)width() / 2.0f,
+                     -(float)height() / 2.0f, (float)height() / 2.0f, -1.0f, 1.0f);
 
     // Point Draw
     pointShader->use().setMatrix4f("view", view);
@@ -113,6 +116,11 @@ void OGLManager::paintGL() {
 void OGLManager::clearCanvas() {
     points->clearData();
     polyfitCurve->clearData();
+    update();
+}
+
+void OGLManager::resolutionChange(int res) {
+    polyfitCurve->setResolution(res);
     update();
 }
 

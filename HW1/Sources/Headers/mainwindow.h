@@ -39,10 +39,12 @@ private:
     QLabel *sigmaLabel;
     QLabel *spanLabel;
     QLabel *lambdaLabel;
+    QLabel *resLabel;
 
     QDoubleSpinBox *sigmaSpinBox;
     QDoubleSpinBox *spanSpinBox;
     QDoubleSpinBox *lambdaSpinBox;
+    QDoubleSpinBox *resSpinBox;
 
     QPushButton *polynomialFittingButton;
     QPushButton *gaussianFittingButton;
@@ -55,6 +57,7 @@ private:
 
 private slots:
     void onClearCanvasPushButton();
+    void onResolutionSpinBox();
 
 
 };

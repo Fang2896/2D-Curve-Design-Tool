@@ -30,7 +30,7 @@ public:
 
     // data functions
     void clearCanvas();
-    void updateAllCurve(QVector2D *data, int n);
+    void resolutionChange(int res);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;

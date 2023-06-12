@@ -30,3 +30,34 @@ Eigen::VectorXd Algorithms::polynomialFit(const Eigen::VectorXd &xvals, const Ei
 
     return result;
 }
+
+//std::vector<double> Algorithms::gaussianFit(const std::vector<double> &xvals, const std::vector<double> &yvals, int n) {
+    // TODO: 实现高斯基的拟合
+//    int m = xvals.size();
+//
+//    Eigen::MatrixXd A(m, n + 1);
+//    A.setConstant(1.0);
+//
+//    for(int i = 1; i <= n; i++) {
+//        for(int j = 0; j < m; j++) {
+//            double x = xvals[j];
+//            double xi = xvals[i - 1];
+//            A(j, i) = std::exp(-(x - xi) * (x - xi) / 2.0);
+//        }
+//    }
+//
+//    Eigen::VectorXd b(m);
+//    for(int j = 0; j < m; j++) {
+//        b(j) = yvals[j];
+//    }
+//
+//    // 用SVD求解
+//    Eigen::VectorXd coeffs = A.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(b);
+//
+//    std::vector<double> coeffsStd(n + 1);
+//    for(int i = 0; i <= n; i++) {
+//        coeffsStd[i] = coeffs[i];
+//    }
+//
+//    return coeffsStd;
+//}

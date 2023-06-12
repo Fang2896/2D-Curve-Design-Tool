@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>729</width>
-    <height>400</height>
+    <width>725</width>
+    <height>390</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>470</x>
-     <y>50</y>
+     <y>60</y>
      <width>200</width>
      <height>25</height>
     </rect>
@@ -163,7 +163,7 @@
    <property name="geometry">
     <rect>
      <x>470</x>
-     <y>340</y>
+     <y>360</y>
      <width>200</width>
      <height>25</height>
     </rect>
@@ -284,6 +284,53 @@
      <family>JetBrains Mono</family>
      <pointsize>11</pointsize>
     </font>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>330</y>
+     <width>90</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>JetBrains Mono</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Resolution</string>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>330</y>
+     <width>90</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>JetBrains Mono</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="decimals">
+    <number>0</number>
+   </property>
+   <property name="minimum">
+    <double>10.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>90000.000000000000000</double>
+   </property>
+   <property name="value">
+    <double>200.000000000000000</double>
    </property>
   </widget>
  </widget>

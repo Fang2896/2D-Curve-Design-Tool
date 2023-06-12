@@ -19,8 +19,14 @@ public:
     Curve();
     ~Curve();
 
-    void setInputPoints(const QVector<QVector2D>& data) {
-        this->points = data;
+    void setResolution(int res) {
+        this->resolution = res;
+        updateVertices();
+    }
+
+    void setWigetSize(int w, int h) {
+        this->width = w;
+        this->height = h;
         updateVertices();
     }
 

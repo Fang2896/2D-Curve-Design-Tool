@@ -16,7 +16,11 @@ Grid::~Grid() {
 }
 
 void Grid::init() {
+    height *= 10;
+    width  *= 10;
+
     data.clear();
+
     // horizontal
     for(int i = -height / 2; i <= height / 2; i += 100) {
 

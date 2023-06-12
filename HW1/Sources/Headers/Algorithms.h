@@ -16,8 +16,13 @@ public:
     static std::tuple<Eigen::VectorXd, Eigen::VectorXd>
             convertPoints(const QVector<QVector2D> &points);
 
-    static Eigen::VectorXd polynomialFit(const Eigen::VectorXd &xvals, const Eigen::VectorXd &yvals,
+    static Eigen::VectorXd polynomialFit(const Eigen::VectorXd &xvals,
+                                         const Eigen::VectorXd &yvals,
                                          int order);
+
+//    static std::vector<double> gaussianFit(const std::vector<double>& xvals,
+//                                           const std::vector<double>& yvals,
+//                                           int n);
 
 private:
     Algorithms() {}

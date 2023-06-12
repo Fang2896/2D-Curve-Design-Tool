@@ -20,17 +20,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /******** Components *********/
     oglmanger = new OGLManager(this, OGLMANAGER_WIDTH, OGLMANAGER_HEIGHT);
-    oglmanger->setFixedWidth(OGLMANAGER_WIDTH);
-    oglmanger->setFixedHeight(OGLMANAGER_HEIGHT);
+//    oglmanger->setFixedWidth(OGLMANAGER_WIDTH);
+//    oglmanger->setFixedHeight(OGLMANAGER_HEIGHT);
 
     titleLabel  = ui->label;
     sigmaLabel  = ui->label_2;
     spanLabel   = ui->label_3;
     lambdaLabel = ui->label_4;
+    resLabel    = ui->label_5;
 
     sigmaSpinBox    = ui->doubleSpinBox;
     spanSpinBox     = ui->doubleSpinBox_2;
     lambdaSpinBox   = ui->doubleSpinBox_3;
+    resSpinBox      = ui->doubleSpinBox_4;
 
     polynomialFittingButton    = ui->pushButton;
     gaussianFittingButton      = ui->pushButton_2;
@@ -42,10 +44,14 @@ MainWindow::MainWindow(QWidget *parent) :
     AddLayout();
 
     /******** Slots and Connects *********/
+    // Clear Canvas
     connect(clearCanvasButton,
             &QPushButton::clicked,
             this,
             &MainWindow::onClearCanvasPushButton);
+    // Resolution Change
+    connect(resSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &MainWindow::onResolutionSpinBox);
 
     /******** Set background color *********/
     QPalette pal(this->palette());
@@ -65,11 +71,13 @@ void MainWindow::AddLayout() {
     vLabelLayout->addWidget(sigmaLabel);
     vLabelLayout->addWidget(spanLabel);
     vLabelLayout->addWidget(lambdaLabel);
+    vLabelLayout->addWidget(resLabel);
 
     auto *vSpinBoxLayout = new QVBoxLayout;
     vSpinBoxLayout->addWidget(sigmaSpinBox);
     vSpinBoxLayout->addWidget(spanSpinBox);
     vSpinBoxLayout->addWidget(lambdaSpinBox);
+    vSpinBoxLayout->addWidget(resSpinBox);
 
     auto *hParameterLayout = new QHBoxLayout;
     hParameterLayout->addLayout(vLabelLayout);
@@ -90,8 +98,8 @@ void MainWindow::AddLayout() {
     vTotalLayout->addWidget(clearCanvasButton);
 
     auto *hTotalLayout = new QHBoxLayout;
-    hTotalLayout->addWidget(oglmanger);
-    hTotalLayout->addLayout(vTotalLayout);
+    hTotalLayout->addWidget(oglmanger, 5);
+    hTotalLayout->addLayout(vTotalLayout, 1);
 
     this->setLayout(hTotalLayout);
 }
@@ -99,4 +107,8 @@ void MainWindow::AddLayout() {
 // Functions
 void MainWindow::onClearCanvasPushButton() {
     oglmanger->clearCanvas();
+}
+
+void MainWindow::onResolutionSpinBox() {
+    oglmanger->resolutionChange((int)resSpinBox->value());
 }

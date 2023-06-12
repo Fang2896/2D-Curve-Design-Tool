@@ -57,7 +57,6 @@ void PolynomialFittingCurve::drawCurve() {
 
 // 核心函数：根据当前的points，计算曲线，并采样曲线上的点后存入vertices
 void PolynomialFittingCurve::updateVertices() {
-    // TODO: 实现曲线绘制函数
     vertices.clear();
 
     if(points.size() < 2) {
@@ -87,6 +86,5 @@ void PolynomialFittingCurve::updateVertices() {
                        vertices.data(), GL_STATIC_DRAW);
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    qDebug() << vertices << Qt::endl;
 }
 
