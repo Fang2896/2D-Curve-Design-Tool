@@ -5,6 +5,7 @@
 #ifndef HW1_POINTS_H
 #define HW1_POINTS_H
 
+#include <Eigen/Dense>
 #include <QVector2D>
 #include <QOpenGLFunctions_3_3_Core>
 
@@ -36,7 +37,7 @@ public:
         core->glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    auto getPointNumber() -> GLuint {
+    auto getPointsSize() -> GLuint {
         return data.size();
     }
 

@@ -39,7 +39,7 @@ add_executable(
         Sources/Grid.cpp
         Sources/Headers/Grid.h
         Sources/Curve.cpp
-        Sources/Headers/Curve.h)
+        Sources/Headers/Curve.h Sources/Algorithms.cpp Sources/Headers/Algorithms.h)
 
 target_link_libraries(HW1
         Qt5::Core

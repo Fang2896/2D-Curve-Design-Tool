@@ -36,8 +36,8 @@ void Grid::init() {
 
     core->glGenBuffers(1, &gridVBO);
     core->glBindBuffer(GL_ARRAY_BUFFER, gridVBO);
-    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * normalizedData.size(),
-                       normalizedData.data(), GL_STATIC_DRAW);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * data.size(),
+                       data.data(), GL_STATIC_DRAW);
 }
 
 void Grid::drawGrid() {
@@ -46,7 +46,7 @@ void Grid::drawGrid() {
 
     core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
                                 2 * sizeof(float), (void*) nullptr);
-    core->glDrawArrays(GL_LINES, 0, normalizedData.size());
+    core->glDrawArrays(GL_LINES, 0, data.size());
 
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
