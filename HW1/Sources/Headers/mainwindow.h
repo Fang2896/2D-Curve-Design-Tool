@@ -28,7 +28,6 @@ Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-
     ~MainWindow() override;
 
 private:
@@ -37,28 +36,31 @@ private:
 
     QLabel *titleLabel;
     QLabel *sigmaLabel;
-    QLabel *spanLabel;
+    QLabel *orderLabel;
     QLabel *lambdaLabel;
     QLabel *resLabel;
 
     QDoubleSpinBox *sigmaSpinBox;
-    QDoubleSpinBox *spanSpinBox;
+    QDoubleSpinBox *orderSpinBox;
     QDoubleSpinBox *lambdaSpinBox;
     QDoubleSpinBox *resSpinBox;
 
-    QPushButton *polynomialFittingButton;
-    QPushButton *gaussianFittingButton;
+    QPushButton *polynomialInterpolateButton;
+    QPushButton *gaussianInterpolateButton;
     QPushButton *polynomialRegressionButton;
-    QPushButton *ridgeRegressionButton;
-    QPushButton *allButton;
     QPushButton *clearCanvasButton;
 
-    void AddLayout();
+    void ConfigureLayout();
 
 private slots:
+    void onPolyInterCurvePushButton();
+    void onGaussianInterCurvePushButton();
+    void onGaussianInterSigmaSpinBox();
     void onClearCanvasPushButton();
     void onResolutionSpinBox();
-
+    void onPolyRegreCurvePushButton();
+    void onPolyRegreCurveOrderSpinBox();
+    void onPolyRegreCurveLambdaSpinBox();
 
 };
 

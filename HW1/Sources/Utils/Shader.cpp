@@ -2,7 +2,7 @@
 // Created by fangl on 2023/6/7.
 //
 
-#include "Shader.h"
+#include "Headers/Shader.h"
 
 Shader::Shader(QOpenGLWidget *parent) {
     shaderProgram = new QOpenGLShaderProgram(parent);

@@ -24,7 +24,7 @@ public:
         updateVertices();
     }
 
-    void setWigetSize(int w, int h) {
+    void setWidgetSize(int w, int h) {
         this->width = w;
         this->height = h;
         updateVertices();
@@ -45,6 +45,7 @@ public:
 
 protected:
     QOpenGLFunctions_3_3_Core *core;
+    GLuint curveVAO;
     GLuint curveVBO;
 
     QVector<QVector2D> points;      // 基点
@@ -59,16 +60,41 @@ protected:
 
 };
 
-class PolynomialFittingCurve : public Curve {
+class PolynomialInterpolateCurve : public Curve {
 public:
-    explicit PolynomialFittingCurve();
-
-    void init(int res, int width, int height) override;
-    void drawCurve() override;
+    PolynomialInterpolateCurve() : Curve() {}
 
 protected:
     void updateVertices() override;
 
+};
+
+class RBFInterpolateCurve : public Curve {
+    // TODO: 可以多添加几种不同的核函数
+public:
+    explicit RBFInterpolateCurve(Kernel_Type kernelType, float sigma = 100);
+    void setSigma(float sigma);
+
+protected:
+    void updateVertices() override;
+
+private:
+    Kernel_Type kernelType_;
+    float sigma_;
+};
+
+class PolynomialRegressionCurve : public Curve {
+public:
+    PolynomialRegressionCurve() : Curve(), order_(3), lambda_(0) {}
+    void setLambda(float lambda);
+    void setOrder(int order);
+
+protected:
+    void updateVertices() override;
+
+private:
+    int order_;
+    float lambda_;
 };
 
 

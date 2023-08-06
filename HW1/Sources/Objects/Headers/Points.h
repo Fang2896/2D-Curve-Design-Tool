@@ -47,6 +47,7 @@ public:
 
 private:
     QOpenGLFunctions_3_3_Core *core;
+    GLuint pointsVAO;
     GLuint pointsVBO;
 
     QVector<QVector2D> data;

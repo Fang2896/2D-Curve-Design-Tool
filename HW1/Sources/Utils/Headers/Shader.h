@@ -6,6 +6,7 @@
 #define HW1_SHADER_H
 
 #include <QDebug>
+#include <QColor>
 #include <QOpenGLShader>
 #include <QOpenGLShaderProgram>
 #include <QString>
@@ -65,6 +66,11 @@ public:
     }
 
     void setVector4f(const QString& name, const QVector4D& value) {
+        int loc = shaderProgram->uniformLocation(name);
+        shaderProgram->setUniformValue(loc, value);
+    }
+
+    void setColor(const QString& name, const QColor& value) {
         int loc = shaderProgram->uniformLocation(name);
         shaderProgram->setUniformValue(loc, value);
     }

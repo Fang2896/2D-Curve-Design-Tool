@@ -23,32 +23,45 @@ MainWindow::MainWindow(QWidget *parent) :
 //    oglmanger->setFixedWidth(OGLMANAGER_WIDTH);
 //    oglmanger->setFixedHeight(OGLMANAGER_HEIGHT);
 
-    titleLabel  = ui->label;
-    sigmaLabel  = ui->label_2;
-    spanLabel   = ui->label_3;
-    lambdaLabel = ui->label_4;
-    resLabel    = ui->label_5;
-
-    sigmaSpinBox    = ui->doubleSpinBox;
-    spanSpinBox     = ui->doubleSpinBox_2;
-    lambdaSpinBox   = ui->doubleSpinBox_3;
-    resSpinBox      = ui->doubleSpinBox_4;
-
-    polynomialFittingButton    = ui->pushButton;
-    gaussianFittingButton      = ui->pushButton_2;
-    polynomialRegressionButton = ui->pushButton_3;
-    ridgeRegressionButton      = ui->pushButton_4;
-    allButton                  = ui->pushButton_5;
-    clearCanvasButton          = ui->pushButton_6;
-
-    AddLayout();
+    ConfigureLayout();
 
     /******** Slots and Connects *********/
+    // PolyInter push button
+    connect(polynomialInterpolateButton,
+            &QPushButton::toggled,
+            this,
+            &MainWindow::onPolyInterCurvePushButton);
+
+    // GaussianInter push button
+    connect(gaussianInterpolateButton,
+            &QPushButton::toggled,
+            this,
+            &MainWindow::onGaussianInterCurvePushButton);
+
+    // change Gaussian interpolation sigma
+    connect(sigmaSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &MainWindow::onGaussianInterSigmaSpinBox);
+
+    // poly regression push button
+    connect(polynomialRegressionButton,
+            &QPushButton::toggled,
+            this,
+            &MainWindow::onPolyRegreCurvePushButton);
+
+    // change poly regression order
+    connect(orderSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &MainWindow::onPolyRegreCurveOrderSpinBox);
+
+    // change poly regression lambda
+    connect(lambdaSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &MainWindow::onPolyRegreCurveLambdaSpinBox);
+
     // Clear Canvas
     connect(clearCanvasButton,
             &QPushButton::clicked,
             this,
             &MainWindow::onClearCanvasPushButton);
+
     // Resolution Change
     connect(resSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this, &MainWindow::onResolutionSpinBox);
@@ -65,17 +78,32 @@ MainWindow::~MainWindow() {
     delete oglmanger;
 }
 
-void MainWindow::AddLayout() {
+void MainWindow::ConfigureLayout() {
+    // config
+    titleLabel  = ui->label;
+    sigmaLabel  = ui->label_2;
+    orderLabel   = ui->label_3;
+    lambdaLabel = ui->label_4;
+    resLabel    = ui->label_5;
+
+    sigmaSpinBox    = ui->doubleSpinBox;
+    orderSpinBox     = ui->doubleSpinBox_2;
+    lambdaSpinBox   = ui->doubleSpinBox_3;
+    resSpinBox      = ui->doubleSpinBox_4;
+
+    polynomialInterpolateButton    = ui->pushButton;
+    gaussianInterpolateButton      = ui->pushButton_2;
+    polynomialRegressionButton = ui->pushButton_3;
+    clearCanvasButton          = ui->pushButton_4;
+
     /******** Layout *********/
     auto *vLabelLayout = new QVBoxLayout;
-    vLabelLayout->addWidget(sigmaLabel);
-    vLabelLayout->addWidget(spanLabel);
+    vLabelLayout->addWidget(orderLabel);
     vLabelLayout->addWidget(lambdaLabel);
     vLabelLayout->addWidget(resLabel);
 
     auto *vSpinBoxLayout = new QVBoxLayout;
-    vSpinBoxLayout->addWidget(sigmaSpinBox);
-    vSpinBoxLayout->addWidget(spanSpinBox);
+    vSpinBoxLayout->addWidget(orderSpinBox);
     vSpinBoxLayout->addWidget(lambdaSpinBox);
     vSpinBoxLayout->addWidget(resSpinBox);
 
@@ -83,15 +111,19 @@ void MainWindow::AddLayout() {
     hParameterLayout->addLayout(vLabelLayout);
     hParameterLayout->addLayout(vSpinBoxLayout);
 
+    auto *hSigmaLayout = new QHBoxLayout;
+    hSigmaLayout->addWidget(sigmaLabel);
+    hSigmaLayout->addWidget(sigmaSpinBox);
+
     auto *vTotalLayout = new QVBoxLayout;
     titleLabel->setAlignment(Qt::AlignCenter);
     vTotalLayout->addWidget(titleLabel);
     vTotalLayout->addStretch(1);
-    vTotalLayout->addWidget(polynomialFittingButton);
-    vTotalLayout->addWidget(gaussianFittingButton);
+    vTotalLayout->addWidget(polynomialInterpolateButton);
+    vTotalLayout->addWidget(gaussianInterpolateButton);
+    vTotalLayout->addLayout(hSigmaLayout);
+    vTotalLayout->addStretch(1);
     vTotalLayout->addWidget(polynomialRegressionButton);
-    vTotalLayout->addWidget(ridgeRegressionButton);
-    vTotalLayout->addWidget(allButton);
     vTotalLayout->addStretch(1);
     vTotalLayout->addLayout(hParameterLayout);
     vTotalLayout->addStretch(5);
@@ -105,6 +137,30 @@ void MainWindow::AddLayout() {
 }
 
 // Functions
+void MainWindow::onPolyInterCurvePushButton() {
+    oglmanger->drawPolyInterCurve(polynomialInterpolateButton->isChecked());
+}
+
+void MainWindow::onGaussianInterCurvePushButton() {
+    oglmanger->drawGaussianInterCurve(gaussianInterpolateButton->isChecked());
+}
+
+void MainWindow::onGaussianInterSigmaSpinBox() {
+    oglmanger->setGaussianInterSigma((float)sigmaSpinBox->value());
+}
+
+void MainWindow::onPolyRegreCurvePushButton() {
+    oglmanger->drawPolyRegreCurve(polynomialRegressionButton->isChecked());
+}
+
+void MainWindow::onPolyRegreCurveOrderSpinBox() {
+    oglmanger->setPolyRegreOrder((int)orderSpinBox->value());
+}
+
+void MainWindow::onPolyRegreCurveLambdaSpinBox() {
+    oglmanger->setPolyRegreLambda((float)lambdaSpinBox->value());
+}
+
 void MainWindow::onClearCanvasPushButton() {
     oglmanger->clearCanvas();
 }

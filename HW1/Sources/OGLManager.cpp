@@ -3,13 +3,6 @@
 //
 
 #include "OGLManager.h"
-#include "Points.h"
-#include "Grid.h"
-#include "Curve.h"
-
-std::unique_ptr<Points> points;
-std::unique_ptr<Grid> grid;
-std::unique_ptr<PolynomialFittingCurve> polyfitCurve;
 
 
 OGLManager::OGLManager(QWidget *parent, int width, int height)
@@ -18,6 +11,11 @@ OGLManager::OGLManager(QWidget *parent, int width, int height)
     this->setGeometry(10, 10, width, height);
 }
 
+OGLManager::~OGLManager() {
+    pointShader->release();
+    gridShader->release();
+    curveShader->release();
+}
 
 /***** Input Functions *****/
 void OGLManager::mouseMoveEvent(QMouseEvent *event) {
@@ -32,8 +30,11 @@ void OGLManager::mousePressEvent(QMouseEvent *event) {
     auto spaceY = (float)height() / 2.0f - mouseY;
 
     points->addPoint({spaceX, spaceY});
-    polyfitCurve->addInputPoints({spaceX, spaceY});
-    qDebug() << "x: " << spaceX << "y: " << spaceY << Qt::endl;
+    polynomialInterpolateCurve->addInputPoints({spaceX, spaceY});
+    gaussianInterpolateCurve->addInputPoints({spaceX, spaceY});
+    polynomialRegressionCurve->addInputPoints({spaceX, spaceY});
+
+    qDebug() << "x: " << spaceX << "y: " << spaceY;
 
     update();
 }
@@ -55,8 +56,14 @@ void OGLManager::initializeGL() {
     grid = std::make_unique<Grid>(width(), height());
     grid->init();
 
-    polyfitCurve = std::make_unique<PolynomialFittingCurve>();
-    polyfitCurve->init(100, width(), height());
+    polynomialInterpolateCurve = std::make_unique<PolynomialInterpolateCurve>();
+    polynomialInterpolateCurve->init(1000, width(), height());
+
+    gaussianInterpolateCurve = std::make_unique<RBFInterpolateCurve>(Kernel_Type::GAUSSIAN);    // sigma = 1
+    gaussianInterpolateCurve->init(1000, width(), height());
+
+    polynomialRegressionCurve = std::make_unique<PolynomialRegressionCurve>();
+    polynomialRegressionCurve->init(1000, width(), height());
 
     // initialize shader program
     pointShader = std::make_unique<Shader>(this);
@@ -76,51 +83,105 @@ void OGLManager::initializeGL() {
     pointShader->use().setMatrix4f("model", model);
     gridShader->use().setMatrix4f("model", model);
     curveShader->use().setMatrix4f("model", model);
-
 }
 
 void OGLManager::resizeGL(int w, int h) {
     core->glViewport(0, 0, w, h);
-    polyfitCurve->setWigetSize(w, h);
+    polynomialInterpolateCurve->setWidgetSize(w, h);
+    gaussianInterpolateCurve->setWidgetSize(w, h);
+    polynomialRegressionCurve->setWidgetSize(w, h);
+
     update();
 }
 
 void OGLManager::paintGL() {
     core->glClear(GL_COLOR_BUFFER_BIT);
 
+    updateGL();
+
+    pointShader->use();
+    points->drawPoints();
+
+    gridShader->use();
+    grid->drawGrid();
+
+    if(isDrawPolyInterCurve) {
+        curveShader->use().setColor("color" ,QColor(255, 0, 0));
+        polynomialInterpolateCurve->drawCurve();
+    }
+
+    if(isDrawGaussianInterCurve) {
+        curveShader->use().setColor("color" ,QColor(0, 0, 255));
+        gaussianInterpolateCurve->drawCurve();
+    }
+
+    if(isDrawPolyRegressionCurve) {
+        curveShader->use().setColor("color" ,QColor(255, 255, 0));
+        polynomialRegressionCurve->drawCurve();
+    }
+
+}
+
+void OGLManager::updateGL() {
     QMatrix4x4 projection, view;
     view.setToIdentity();
     projection.ortho(-(float)width() / 2.0f, (float)width() / 2.0f,
                      -(float)height() / 2.0f, (float)height() / 2.0f, -1.0f, 1.0f);
 
-    // Point Draw
     pointShader->use().setMatrix4f("view", view);
     pointShader->use().setMatrix4f("projection", projection);
-    points->drawPoints();
-    pointShader->release();
 
-    // Grid Draw
     gridShader->use().setMatrix4f("view", view);
     gridShader->use().setMatrix4f("projection", projection);
-    grid->drawGrid();
-    gridShader->release();
 
-    // Curve Draw
     curveShader->use().setMatrix4f("view", view);
     curveShader->use().setMatrix4f("projection", projection);
-    polyfitCurve->drawCurve();
-    curveShader->release();
 
 }
 
 void OGLManager::clearCanvas() {
     points->clearData();
-    polyfitCurve->clearData();
+    polynomialInterpolateCurve->clearData();
+    gaussianInterpolateCurve->clearData();
+    polynomialRegressionCurve->clearData();
     update();
 }
 
 void OGLManager::resolutionChange(int res) {
-    polyfitCurve->setResolution(res);
+    polynomialInterpolateCurve->setResolution(res);
+    gaussianInterpolateCurve->setResolution(res);
+    polynomialRegressionCurve->setResolution(res);
+
+    update();
+}
+
+void OGLManager::drawPolyInterCurve(bool isDraw) {
+    this->isDrawPolyInterCurve = isDraw;
+    update();
+}
+
+void OGLManager::drawGaussianInterCurve(bool isDraw) {
+    this->isDrawGaussianInterCurve = isDraw;
+    update();
+}
+
+void OGLManager::setGaussianInterSigma(float sigma) {
+    gaussianInterpolateCurve->setSigma(sigma);
+    update();
+}
+
+void OGLManager::drawPolyRegreCurve(bool isDraw) {
+    isDrawPolyRegressionCurve = isDraw;
+    update();
+}
+
+void OGLManager::setPolyRegreOrder(int order) {
+    polynomialRegressionCurve->setOrder(order);
+    update();
+}
+
+void OGLManager::setPolyRegreLambda(float lambda) {
+    polynomialRegressionCurve->setLambda(lambda);
     update();
 }
 

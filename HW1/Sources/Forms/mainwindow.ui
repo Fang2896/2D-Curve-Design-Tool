@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>725</width>
-    <height>390</height>
+    <width>729</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <rect>
      <x>470</x>
      <y>60</y>
-     <width>200</width>
+     <width>221</width>
      <height>25</height>
     </rect>
    </property>
@@ -32,7 +32,7 @@
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="text">
-    <string>Polynomial Fitting</string>
+    <string>Polynomial Interpolation</string>
    </property>
    <property name="checkable">
     <bool>true</bool>
@@ -64,7 +64,7 @@
     <rect>
      <x>470</x>
      <y>90</y>
-     <width>200</width>
+     <width>221</width>
      <height>25</height>
     </rect>
    </property>
@@ -78,7 +78,7 @@
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="text">
-    <string>Gaussian Fitting</string>
+    <string>RBF Interpolation</string>
    </property>
    <property name="checkable">
     <bool>true</bool>
@@ -88,8 +88,8 @@
    <property name="geometry">
     <rect>
      <x>470</x>
-     <y>130</y>
-     <width>200</width>
+     <y>160</y>
+     <width>221</width>
      <height>25</height>
     </rect>
    </property>
@@ -113,58 +113,8 @@
    <property name="geometry">
     <rect>
      <x>470</x>
-     <y>160</y>
-     <width>200</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>JetBrains Mono</family>
-     <pointsize>11</pointsize>
-    </font>
-   </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
-   <property name="text">
-    <string>Ridge Regression</string>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_5">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>200</y>
-     <width>200</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>JetBrains Mono</family>
-     <pointsize>11</pointsize>
-    </font>
-   </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
-   <property name="text">
-    <string>ALL</string>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_6">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>360</y>
-     <width>200</width>
+     <y>350</y>
+     <width>221</width>
      <height>25</height>
     </rect>
    </property>
@@ -184,8 +134,8 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBox">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>230</y>
+     <x>600</x>
+     <y>120</y>
      <width>90</width>
      <height>25</height>
     </rect>
@@ -196,12 +146,27 @@
      <pointsize>11</pointsize>
     </font>
    </property>
+   <property name="decimals">
+    <number>3</number>
+   </property>
+   <property name="minimum">
+    <double>0.001000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>300.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>0.100000000000000</double>
+   </property>
+   <property name="value">
+    <double>100.000000000000000</double>
+   </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>230</y>
+     <x>490</x>
+     <y>120</y>
      <width>90</width>
      <height>25</height>
     </rect>
@@ -219,9 +184,9 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>260</y>
-     <width>90</width>
+     <x>480</x>
+     <y>190</y>
+     <width>51</width>
      <height>25</height>
     </rect>
    </property>
@@ -232,15 +197,15 @@
     </font>
    </property>
    <property name="text">
-    <string>  Span</string>
+    <string>Order</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>300</y>
-     <width>90</width>
+     <y>220</y>
+     <width>81</width>
      <height>25</height>
     </rect>
    </property>
@@ -257,8 +222,8 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>260</y>
+     <x>590</x>
+     <y>190</y>
      <width>90</width>
      <height>25</height>
     </rect>
@@ -269,12 +234,21 @@
      <pointsize>11</pointsize>
     </font>
    </property>
+   <property name="decimals">
+    <number>0</number>
+   </property>
+   <property name="minimum">
+    <double>1.000000000000000</double>
+   </property>
+   <property name="value">
+    <double>2.000000000000000</double>
+   </property>
   </widget>
   <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>300</y>
+     <x>590</x>
+     <y>220</y>
      <width>90</width>
      <height>25</height>
     </rect>
@@ -289,8 +263,8 @@
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>330</y>
+     <x>480</x>
+     <y>270</y>
      <width>90</width>
      <height>25</height>
     </rect>
@@ -308,8 +282,8 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>330</y>
+     <x>590</x>
+     <y>270</y>
      <width>90</width>
      <height>25</height>
     </rect>
@@ -330,7 +304,7 @@
     <double>90000.000000000000000</double>
    </property>
    <property name="value">
-    <double>200.000000000000000</double>
+    <double>1000.000000000000000</double>
    </property>
   </widget>
  </widget>

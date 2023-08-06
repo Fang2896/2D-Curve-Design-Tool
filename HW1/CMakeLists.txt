@@ -6,10 +6,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.15.2/5.15.2/mingw81_32")
+
 include_directories(
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/Sources/Headers
         ${PROJECT_SOURCE_DIR}/Sources/Resources
+        ${PROJECT_SOURCE_DIR}/Sources/Utils/Headers
+        ${PROJECT_SOURCE_DIR}/Sources/Objects/Headers
         D:/cpplib/eigen
 )
 
@@ -30,16 +34,16 @@ add_executable(
         Sources/Forms/mainwindow.ui
         Sources/OGLManager.cpp
         Sources/Headers/OGLManager.h
-        Sources/Headers/Grid.h
+        Sources/Objects/Headers/Grid.h
         ${QRC_SOURCE_FILES}
-        Sources/Points.cpp
-        Sources/Headers/Points.h
-        Sources/Shader.cpp
-        Sources/Headers/Shader.h
-        Sources/Grid.cpp
-        Sources/Headers/Grid.h
-        Sources/Curve.cpp
-        Sources/Headers/Curve.h Sources/Algorithms.cpp Sources/Headers/Algorithms.h)
+        Sources/Objects/Points.cpp
+        Sources/Objects/Headers/Points.h
+        Sources/Utils/Shader.cpp
+        Sources/Utils/Headers/Shader.h
+        Sources/Objects/Grid.cpp
+        Sources/Objects/Headers/Grid.h
+        Sources/Objects/Curve.cpp
+        Sources/Objects/Headers/Curve.h Sources/Utils/Algorithms.cpp Sources/Utils/Headers/Algorithms.h)
 
 target_link_libraries(HW1
         Qt5::Core

@@ -22,6 +22,7 @@ private:
     int width, height;
 
     QOpenGLFunctions_3_3_Core *core;
+    GLuint gridVAO;
     GLuint gridVBO;
 
     QVector<QVector2D> data;
