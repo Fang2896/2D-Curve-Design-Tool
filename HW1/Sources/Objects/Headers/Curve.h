@@ -70,7 +70,6 @@ protected:
 };
 
 class RBFInterpolateCurve : public Curve {
-    // TODO: 可以多添加几种不同的核函数
 public:
     explicit RBFInterpolateCurve(Kernel_Type kernelType, float sigma = 100);
     void setSigma(float sigma);
@@ -96,6 +95,17 @@ private:
     int order_;
     float lambda_;
 };
+
+class RBFNNPredictCurve : public Curve {
+public:
+    RBFNNPredictCurve() : Curve() {}
+
+protected:
+    // update就是重新训练 + 重新predict
+    void updateVertices() override;
+
+};
+
 
 
 #endif //HW1_CURVE_H

@@ -71,4 +71,14 @@ Eigen::VectorXd Algorithms::polynomialRegressionCoeff(const Eigen::VectorXd &xva
     // return X.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(yvals);
 }
 
+void Algorithms::trainRBFNN(const Eigen::VectorXd &xvals, const Eigen::VectorXd &yvals) {
+    // TODO: implement C++ to Python train section
+}
+
+QVector<float> Algorithms::predictNetPoints(const QVector<float> &xvals) {
+    // TODO: implement C++ to Python predict section
+
+    return QVector<float> {0};
+}
+
 

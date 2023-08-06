@@ -35,6 +35,11 @@ private:
     OGLManager *oglmanger;
 
     QLabel *titleLabel;
+    QLabel *titleInterLabel;
+    QLabel *titleRegreLabel;
+    QLabel *titleRBFLabel;
+    QLabel *titleParam;
+
     QLabel *sigmaLabel;
     QLabel *orderLabel;
     QLabel *lambdaLabel;
@@ -48,6 +53,12 @@ private:
     QPushButton *polynomialInterpolateButton;
     QPushButton *gaussianInterpolateButton;
     QPushButton *polynomialRegressionButton;
+    QPushButton *RBFTrainButton;
+    QPushButton *RBFPredictButton;
+    QPushButton *uniformParamButton;
+    QPushButton *chordalParamButton;
+    QPushButton *centrietalParamButton;
+
     QPushButton *clearCanvasButton;
 
     void ConfigureLayout();

@@ -164,3 +164,34 @@ void PolynomialRegressionCurve::updateVertices() {
 }
 
 
+/********* RBF Neural Network Train and Predict **********/
+void RBFNNPredictCurve::updateVertices() {
+    vertices.clear();
+
+    if(points.size() < 2) {
+        return;
+    }
+
+    Eigen::VectorXd  xvals, yvals;
+    std::tie(xvals, yvals) = Algorithms::convertPoints(points);
+
+    // 从points中训练RBF网络
+    Algorithms::trainRBFNN(xvals, yvals);
+
+    // 采样点
+    QVector<float> xpred;
+    double step = (double)width / (double)resolution;
+    for(int i = 0; i <= resolution; i++) {
+        double x = -(double)width / 2.0f + i * step;
+        xpred.push_back(x);
+    }
+
+    // 从训练好的RBF网络中基于采样点来预测
+    QVector<float> ypred = Algorithms::predictNetPoints(xpred);
+
+    vertices.reserve(xpred.size());
+    for (int i = 0; i < xpred.size(); ++i) {
+        vertices.push_back(QVector2D(xpred[i], ypred[i]));
+    }
+
+}

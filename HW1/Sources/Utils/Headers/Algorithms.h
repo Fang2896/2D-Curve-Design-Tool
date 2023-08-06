@@ -9,6 +9,8 @@
 #include <QVector>
 #include <QVector2D>
 
+// #include <Python.h>
+
 enum class Kernel_Type {
     GAUSSIAN,
     LINEAR
@@ -35,6 +37,11 @@ public:
     static Eigen::VectorXd polynomialRegressionCoeff(const Eigen::VectorXd &xvals,
                                                      const Eigen::VectorXd &yvals,
                                                      int order, float lambda);
+
+    static void trainRBFNN(const Eigen::VectorXd &xvals,
+                           const Eigen::VectorXd &yvals);
+
+    static QVector<float> predictNetPoints(const QVector<float> &xvals);
 
 private:
     Algorithms() {}

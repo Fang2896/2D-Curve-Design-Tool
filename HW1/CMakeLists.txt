@@ -14,8 +14,18 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/Sources/Resources
         ${PROJECT_SOURCE_DIR}/Sources/Utils/Headers
         ${PROJECT_SOURCE_DIR}/Sources/Objects/Headers
+
+        # python
+        D:/Anaconda/envs/UniverseEnv/include
+
+        # third party lib
         D:/cpplib/eigen
 )
+
+link_libraries(
+    D:/Anaconda/envs/UniverseEnv/libs/python310.lib
+)
+
 
 find_package(Qt5 COMPONENTS
         Core
@@ -43,7 +53,9 @@ add_executable(
         Sources/Objects/Grid.cpp
         Sources/Objects/Headers/Grid.h
         Sources/Objects/Curve.cpp
-        Sources/Objects/Headers/Curve.h Sources/Utils/Algorithms.cpp Sources/Utils/Headers/Algorithms.h)
+        Sources/Objects/Headers/Curve.h
+        Sources/Utils/Algorithms.cpp
+        Sources/Utils/Headers/Algorithms.h)
 
 target_link_libraries(HW1
         Qt5::Core

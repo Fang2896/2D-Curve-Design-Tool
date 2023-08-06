@@ -80,53 +80,85 @@ MainWindow::~MainWindow() {
 
 void MainWindow::ConfigureLayout() {
     // config
-    titleLabel  = ui->label;
-    sigmaLabel  = ui->label_2;
-    orderLabel   = ui->label_3;
-    lambdaLabel = ui->label_4;
-    resLabel    = ui->label_5;
+    titleLabel      = ui->label;
+    titleInterLabel = ui->label_Interpolation;
+    titleRegreLabel = ui->label_Regression;
+    titleRBFLabel   = ui->label_RBF;
+    titleParam      = ui->label_Param;
+
+    sigmaLabel      = ui->label_Sigma;
+    orderLabel      = ui->label_Order;
+    lambdaLabel     = ui->label_Lambda;
+    resLabel        = ui->label_Resolution;
 
     sigmaSpinBox    = ui->doubleSpinBox;
-    orderSpinBox     = ui->doubleSpinBox_2;
+    orderSpinBox    = ui->doubleSpinBox_2;
     lambdaSpinBox   = ui->doubleSpinBox_3;
     resSpinBox      = ui->doubleSpinBox_4;
 
-    polynomialInterpolateButton    = ui->pushButton;
-    gaussianInterpolateButton      = ui->pushButton_2;
-    polynomialRegressionButton = ui->pushButton_3;
-    clearCanvasButton          = ui->pushButton_4;
+    polynomialInterpolateButton     = ui->pushButton_PolyInter;
+    gaussianInterpolateButton       = ui->pushButton_RBFInter;
+    polynomialRegressionButton      = ui->pushButton_PolyRegre;
+    RBFTrainButton                  = ui->pushButton_Train;
+    RBFPredictButton                = ui->pushButton_Predict;
+    uniformParamButton              = ui->pushButton_UniformParam;
+    chordalParamButton              = ui->pushButton_ChordalParam;
+    centrietalParamButton           = ui->pushButton_CentrietalParam;
+
+    clearCanvasButton               = ui->pushButton_Clear;
 
     /******** Layout *********/
-    auto *vLabelLayout = new QVBoxLayout;
-    vLabelLayout->addWidget(orderLabel);
-    vLabelLayout->addWidget(lambdaLabel);
-    vLabelLayout->addWidget(resLabel);
+    // sigma Line
+    auto *hSigmaLineLayout = new QHBoxLayout;
+    hSigmaLineLayout->addWidget(sigmaLabel);
+    hSigmaLineLayout->addWidget(sigmaSpinBox);
 
-    auto *vSpinBoxLayout = new QVBoxLayout;
-    vSpinBoxLayout->addWidget(orderSpinBox);
-    vSpinBoxLayout->addWidget(lambdaSpinBox);
-    vSpinBoxLayout->addWidget(resSpinBox);
+    // order Line
+    auto *hOrderLineLayout = new QHBoxLayout;
+    hOrderLineLayout->addWidget(orderLabel);
+    hOrderLineLayout->addWidget(orderSpinBox);
 
-    auto *hParameterLayout = new QHBoxLayout;
-    hParameterLayout->addLayout(vLabelLayout);
-    hParameterLayout->addLayout(vSpinBoxLayout);
+    // lambda Line
+    auto *hLambdaLineLayout = new QHBoxLayout;
+    hLambdaLineLayout->addWidget(lambdaLabel);
+    hLambdaLineLayout->addWidget(lambdaSpinBox);
 
-    auto *hSigmaLayout = new QHBoxLayout;
-    hSigmaLayout->addWidget(sigmaLabel);
-    hSigmaLayout->addWidget(sigmaSpinBox);
+    // RBF network Line
+    auto *hRBFNetWorkLineLayout = new QHBoxLayout;
+    hRBFNetWorkLineLayout->addWidget(RBFTrainButton);
+    hRBFNetWorkLineLayout->addWidget(RBFPredictButton);
 
+    // Resolution Line
+    auto *hResolutionLineLayout = new QHBoxLayout;
+    hResolutionLineLayout->addWidget(resLabel);
+    hResolutionLineLayout->addWidget(resSpinBox);
+
+    // Total
     auto *vTotalLayout = new QVBoxLayout;
     titleLabel->setAlignment(Qt::AlignCenter);
     vTotalLayout->addWidget(titleLabel);
     vTotalLayout->addStretch(1);
+
+    vTotalLayout->addWidget(titleInterLabel);
     vTotalLayout->addWidget(polynomialInterpolateButton);
     vTotalLayout->addWidget(gaussianInterpolateButton);
-    vTotalLayout->addLayout(hSigmaLayout);
-    vTotalLayout->addStretch(1);
+    vTotalLayout->addLayout(hSigmaLineLayout);
+
+    vTotalLayout->addWidget(titleRegreLabel);
     vTotalLayout->addWidget(polynomialRegressionButton);
-    vTotalLayout->addStretch(1);
-    vTotalLayout->addLayout(hParameterLayout);
+    vTotalLayout->addLayout(hOrderLineLayout);
+    vTotalLayout->addLayout(hLambdaLineLayout);
+
+    vTotalLayout->addWidget(titleRBFLabel);
+    vTotalLayout->addLayout(hRBFNetWorkLineLayout);
+
+    vTotalLayout->addWidget(titleParam);
+    vTotalLayout->addWidget(uniformParamButton);
+    vTotalLayout->addWidget(chordalParamButton);
+    vTotalLayout->addWidget(centrietalParamButton);
+
     vTotalLayout->addStretch(5);
+    vTotalLayout->addLayout(hResolutionLineLayout);
     vTotalLayout->addWidget(clearCanvasButton);
 
     auto *hTotalLayout = new QHBoxLayout;
