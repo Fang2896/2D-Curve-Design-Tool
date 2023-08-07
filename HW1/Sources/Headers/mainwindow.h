@@ -73,6 +73,9 @@ private slots:
     void onPolyRegreCurveOrderSpinBox();
     void onPolyRegreCurveLambdaSpinBox();
 
+    void onUniformParamCurvePushButton();
+    void onChordalParamCurvePushButton();
+    void onCentrietalParamCurvePushButton();
 };
 
 

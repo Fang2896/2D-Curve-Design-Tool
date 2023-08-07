@@ -43,7 +43,8 @@ Eigen::VectorXd Algorithms::rbfInterpolateCoeff(Kernel_Type kernelType, const fl
         }
     }
 
-    auto result = Phi.lu().solve(yvals);
+    // Eigen::VectorXd result = Phi.lu().solve(yvals);
+    auto result = Phi.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(yvals);
     return result;
 }
 

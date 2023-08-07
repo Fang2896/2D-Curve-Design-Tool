@@ -30,7 +30,7 @@ public:
         updateVertices();
     }
 
-    void addInputPoints(QVector2D point) {
+    virtual void addInputPoints(QVector2D point) {
         this->points.push_back(point);
         updateVertices();
     }
@@ -106,6 +106,34 @@ protected:
 
 };
 
+// 3 parameters methods
+
+class UniformParamCurve : public Curve {
+public:
+    UniformParamCurve() : Curve() {}
+
+protected:
+    void updateVertices() override;
+
+};
+
+class ChordalParamCurve : public Curve {
+public:
+    ChordalParamCurve() : Curve() {}
+
+protected:
+    void updateVertices() override;
+
+};
+
+class CentrietalParamCurve : public Curve {
+public:
+    CentrietalParamCurve() : Curve() {}
+
+protected:
+    void updateVertices() override;
+
+};
 
 
 #endif //HW1_CURVE_H

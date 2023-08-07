@@ -66,6 +66,22 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(resSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this, &MainWindow::onResolutionSpinBox);
 
+    // parameters:
+    connect(uniformParamButton,
+            &QPushButton::toggled,
+            this,
+            &MainWindow::onUniformParamCurvePushButton);
+
+    connect(chordalParamButton,
+            &QPushButton::toggled,
+            this,
+            &MainWindow::onChordalParamCurvePushButton);
+
+    connect(centrietalParamButton,
+            &QPushButton::toggled,
+            this,
+            &MainWindow::onCentrietalParamCurvePushButton);
+
     /******** Set background color *********/
     QPalette pal(this->palette());
     pal.setColor(QPalette::Window, QColor(99, 103, 106));
@@ -199,4 +215,16 @@ void MainWindow::onClearCanvasPushButton() {
 
 void MainWindow::onResolutionSpinBox() {
     oglmanger->resolutionChange((int)resSpinBox->value());
+}
+
+void MainWindow::onUniformParamCurvePushButton() {
+    oglmanger->drawUniformParamCurve(uniformParamButton->isChecked());
+}
+
+void MainWindow::onChordalParamCurvePushButton() {
+    oglmanger->drawChordalParamCurve(chordalParamButton->isChecked());
+}
+
+void MainWindow::onCentrietalParamCurvePushButton() {
+    oglmanger->drawCentrietalParamCurve(centrietalParamButton->isChecked());
 }

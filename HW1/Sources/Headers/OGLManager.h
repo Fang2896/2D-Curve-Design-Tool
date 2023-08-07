@@ -45,6 +45,10 @@ public:
     void setPolyRegreOrder(int order);
     void setPolyRegreLambda(float lambda);
 
+    void drawUniformParamCurve(bool isDraw);
+    void drawChordalParamCurve(bool isDraw);
+    void drawCentrietalParamCurve(bool isDraw);
+
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -62,6 +66,9 @@ private:
     std::unique_ptr<PolynomialInterpolateCurve> polynomialInterpolateCurve;
     std::unique_ptr<RBFInterpolateCurve> gaussianInterpolateCurve;
     std::unique_ptr<PolynomialRegressionCurve> polynomialRegressionCurve;
+    std::unique_ptr<UniformParamCurve> uniformParamCurve;
+    std::unique_ptr<ChordalParamCurve> chordalParamCurve;
+    std::unique_ptr<CentrietalParamCurve> centrietalParamCurve;
 
     std::unique_ptr<Shader> pointShader;
     std::unique_ptr<Shader> gridShader;
@@ -70,6 +77,9 @@ private:
     bool isDrawPolyInterCurve = false;
     bool isDrawGaussianInterCurve = false;
     bool isDrawPolyRegressionCurve = false;
+    bool isDrawUniformParamCurve = false;
+    bool isDrawChordalParamCurve = false;
+    bool isDrawCentrietalParamCurve = false;
 
     void updateGL();
 

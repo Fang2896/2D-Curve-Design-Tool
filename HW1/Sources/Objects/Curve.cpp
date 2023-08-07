@@ -195,3 +195,139 @@ void RBFNNPredictCurve::updateVertices() {
     }
 
 }
+
+
+/********* Uniform Parameters **********/
+void UniformParamCurve::updateVertices() {
+    vertices.clear();
+
+    if(points.size() < 2) {
+        return;
+    }
+
+    int num = points.size();
+    Eigen::VectorXd  xvals, yvals, tvals;
+    std::tie(xvals, yvals) = Algorithms::convertPoints(points);
+    tvals = Eigen::VectorXd::LinSpaced(num, 0, 1);
+
+    Eigen::VectorXd xCoeffs = Algorithms::polynomialInterpolateCoeff(tvals, xvals);
+    Eigen::VectorXd yCoeffs = Algorithms::polynomialInterpolateCoeff(tvals, yvals);
+
+    // 采样
+    float startX = xvals(0);
+    float endX = xvals(num - 1);
+    double step = (double)width / (double)resolution;
+    int numSeg = std::floor((endX - startX) / step);
+
+    for(int i = 0; i <= numSeg; i++) {
+        double x = 0;
+        double y = 0;
+        double t = (double)i / numSeg;  // 用于画点
+        for(int j = 0; j < num; j++) {
+            x += xCoeffs[j] * std::pow(t, j);
+            y += yCoeffs[j] * std::pow(t, j);
+        }
+        vertices.push_back(QVector2D(x, y));
+    }
+
+    core->glBindBuffer(GL_ARRAY_BUFFER, curveVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * vertices.size(),
+                       vertices.data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+// 暂且都用polynomial interpolation吧
+/********* Chordal Parameters **********/
+void ChordalParamCurve::updateVertices() {
+    vertices.clear();
+
+    if(points.size() < 2) {
+        return;
+    }
+
+    int num = points.size();
+    Eigen::VectorXd  xvals, yvals, tvals(num);
+    std::tie(xvals, yvals) = Algorithms::convertPoints(points);
+
+    // 关键的不同就只是t参数的计算罢了
+    tvals(0) = 0;
+    for(int i = 1; i < num; i++) {
+        double dx = xvals(i) - xvals(i - 1);
+        double dy = yvals(i) - yvals(i - 1);
+        tvals(i) = tvals(i - 1) + std::sqrt(dx*dx + dy*dy);
+    }
+    tvals /= tvals(num - 1);    // range 0 ~ 1
+
+    Eigen::VectorXd xCoeffs = Algorithms::polynomialInterpolateCoeff(tvals, xvals);
+    Eigen::VectorXd yCoeffs = Algorithms::polynomialInterpolateCoeff(tvals, yvals);
+
+    // 采样
+    float startX = xvals(0);
+    float endX = xvals(num - 1);
+    double step = (double)width / (double)resolution;
+    int numSeg = std::floor((endX - startX) / step);
+
+    for(int i = 0; i <= numSeg; i++) {
+        double x = 0;
+        double y = 0;
+        double t = (double)i / numSeg;  // 用于画点
+        for(int j = 0; j < num; j++) {
+            x += xCoeffs[j] * std::pow(t, j);
+            y += yCoeffs[j] * std::pow(t, j);
+        }
+        vertices.push_back(QVector2D(x, y));
+    }
+
+    core->glBindBuffer(GL_ARRAY_BUFFER, curveVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * vertices.size(),
+                       vertices.data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+
+/********* Centrietal Parameters **********/
+void CentrietalParamCurve::updateVertices() {
+    vertices.clear();
+
+    if(points.size() < 2) {
+        return;
+    }
+
+    int num = points.size();
+    Eigen::VectorXd  xvals, yvals, tvals(num);
+    std::tie(xvals, yvals) = Algorithms::convertPoints(points);
+
+    // 关键的不同就只是t参数的计算罢了
+    tvals(0) = 0;
+    for(int i = 1; i < num; i++) {
+        double dx = xvals(i) - xvals(i - 1);
+        double dy = yvals(i) - yvals(i - 1);
+        tvals(i) = tvals(i - 1) + std::sqrt(std::sqrt(dx*dx + dy*dy));
+    }
+    tvals /= tvals(num - 1);    // range 0 ~ 1
+
+    Eigen::VectorXd xCoeffs = Algorithms::polynomialInterpolateCoeff(tvals, xvals);
+    Eigen::VectorXd yCoeffs = Algorithms::polynomialInterpolateCoeff(tvals, yvals);
+
+    // 采样
+    float startX = xvals(0);
+    float endX = xvals(num - 1);
+    double step = (double)width / (double)resolution;
+    int numSeg = std::floor((endX - startX) / step);
+
+    for(int i = 0; i <= numSeg; i++) {
+        double x = 0;
+        double y = 0;
+        double t = (double)i / numSeg;  // 用于画点
+        for(int j = 0; j < num; j++) {
+            x += xCoeffs[j] * std::pow(t, j);
+            y += yCoeffs[j] * std::pow(t, j);
+        }
+        vertices.push_back(QVector2D(x, y));
+    }
+
+    core->glBindBuffer(GL_ARRAY_BUFFER, curveVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * vertices.size(),
+                       vertices.data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
