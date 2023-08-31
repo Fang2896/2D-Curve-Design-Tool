@@ -1,3 +1,0 @@
-"D:\CLion 2023.1.1\bin\cmake\win\x64\bin\cmake.exe" -E rm -f CMakeFiles\2D-Curve-Design-Tool.dir/objects.a
-C:\Qt\Qt5.15.2\Tools\mingw810_64\bin\ar.exe qc CMakeFiles\2D-Curve-Design-Tool.dir/objects.a @CMakeFiles\2D-Curve-Design-Tool.dir\objects1
-C:\Qt\Qt5.15.2\Tools\mingw810_64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\2D-Curve-Design-Tool.dir/objects.a -Wl,--no-whole-archive -o 2D-Curve-Design-Tool.exe -Wl,--out-implib,lib2D-Curve-Design-Tool.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\2D-Curve-Design-Tool.dir\linkLibs.rsp

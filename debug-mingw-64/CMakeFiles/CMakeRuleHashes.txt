@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-075a5c5889023ef9f09af86ea8c6fb1b 2D-Curve-Design-Tool_autogen/UVLADIE3JM/qrc_res.cpp
-8ffdfbe57ee873e98fae9e66abe70d9d CMakeFiles/2D-Curve-Design-Tool_autogen

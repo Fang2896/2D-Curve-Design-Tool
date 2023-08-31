@@ -1,4 +1,0 @@
-E:/ToyPrograms/GL/2D-Curve-Design-Tool/debug-mingw-64/CMakeFiles/2D-Curve-Design-Tool.dir
-E:/ToyPrograms/GL/2D-Curve-Design-Tool/debug-mingw-64/CMakeFiles/edit_cache.dir
-E:/ToyPrograms/GL/2D-Curve-Design-Tool/debug-mingw-64/CMakeFiles/rebuild_cache.dir
-E:/ToyPrograms/GL/2D-Curve-Design-Tool/debug-mingw-64/CMakeFiles/2D-Curve-Design-Tool_autogen.dir

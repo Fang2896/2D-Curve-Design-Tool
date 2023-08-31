@@ -4,3 +4,4 @@
 /.idea/
 /build32-release/
 /cmake-build-debug-qt-mingw-64/
+/debug-mingw-64/
