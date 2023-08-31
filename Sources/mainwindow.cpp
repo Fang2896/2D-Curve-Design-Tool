@@ -9,7 +9,6 @@
 
 
 /***** Parameters *****/
-// 必须保证是100的倍数，而且百位数是偶数 （后面来调？）
 const int OGLMANAGER_WIDTH = 800;
 const int OGLMANAGER_HEIGHT = 400;
 

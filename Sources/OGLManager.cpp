@@ -238,5 +238,3 @@ void OGLManager::drawCentrietalParamCurve(bool isDraw) {
     update();
 }
 
-
-

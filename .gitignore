@@ -1,0 +1,6 @@
+/cmake-build-debug/
+/build32/
+/build64/
+/.idea/
+/build32-release/
+/cmake-build-debug-qt-mingw-64/

@@ -56,7 +56,6 @@ float Algorithms::computeKernelGaussianValue(const float &x, const float &mean, 
     return std::exp(exponent);
 }
 
-
 Eigen::VectorXd Algorithms::polynomialRegressionCoeff(const Eigen::VectorXd &xvals, const Eigen::VectorXd &yvals, int order, float lambda) {
     int n = (int)xvals.size();
     Eigen::MatrixXd X(n, order + 1);
