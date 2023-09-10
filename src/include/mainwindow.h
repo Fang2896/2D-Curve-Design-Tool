@@ -30,7 +30,8 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void switchCurveType(CurveType curveType);
+    void onClearCanvas();
+
 
 // private variables
 private:
@@ -43,7 +44,6 @@ private:
     QStackedWidget *m_curveControlStackedWidget;
     QLabel *m_titleLabel;
     QPushButton *m_clearButton;
-
 
 // private function
 private:

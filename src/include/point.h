@@ -6,51 +6,77 @@
 #define POINT_H
 
 #include <QColor>
-#include <QVector3D>
+#include <QVector2D>
 #include <utility>
 
 
 class Point
 {
 public:
-    Point(const QVector3D& position, QColor color, float size)
+    // 颜色和size留到后面来实现
+    Point(const QVector2D& position, QColor color, float size)
         : id(nextID++) ,m_position(position), m_color(std::move(color)), m_size(size) { }
 
-    explicit Point(const QVector3D& position)
+    explicit Point(const QVector2D& position)
         : id(nextID++), m_position(position)
     {
         m_color = Qt::white;
         m_size = 0.1f;
     }
 
-    int getID() const {
-        return id;
+    int getID() const;
+
+    static void resetID() {
+        nextID = 0;
     }
 
     // getter and setter for position
-    QVector3D position() const { return m_position; }
-    void setPosition(const QVector3D& position) { m_position = position; }
+    QVector2D getPosition() const;
+    void setPosition(const QVector2D& position);
 
     // getter and setter for color
-    QColor color() const { return m_color; }
-    void setColor(const QColor& color) { m_color = color; }
+    QColor getColor() const;
+    void setColor(const QColor& color);
 
     // getter and setter for size
-    float size() const { return m_size; }
-    void setSize(float size) { m_size = size; }
+    float getSize() const;
+    void setSize(float size);
 
-    bool operator==(const Point& other) const {
-        return id == other.id;
-    }
+    bool operator==(const Point& other) const;
 
 private:
     int id;
-    static int nextID;
+    static inline int nextID = 0;
 
-    QVector3D m_position;
-    QColor m_color;
+    QVector2D m_position;
+    QColor m_color = Qt::white;
     float m_size;   // display size
 };
 
+// 管理所有Point，以及相应的数据
+class Points
+{
+public:
+    void clearData();
+
+    const QVector<Point>& getPoints() const;
+    const QVector<QVector2D>& getPointsData() const;
+    const QVector<QColor>& getPointsColorData() const;
+    int getPointsSize();
+
+    void addPoint(const Point& point);
+    void addPoint(QVector2D pos);
+
+    bool removePoint(const Point& point);
+    bool removePoint(int id);
+
+    void setPointColor(int index, QColor pointColor);
+
+private:
+    // 这两个数据一定要同步！
+    QVector<Point> m_points;
+    QVector<QVector2D> m_pointsData;
+    QVector<QColor> m_colorsData;
+};
 
 #endif //POINT_H
