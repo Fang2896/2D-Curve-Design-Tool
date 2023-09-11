@@ -2,5 +2,11 @@
     <qresource prefix="/">
         <file>resources/shaders/point.vert</file>
         <file>resources/shaders/point.frag</file>
+
+        <file>resources/shaders/grid.vert</file>
+        <file>resources/shaders/grid.frag</file>
+
+        <file>resources/shaders/curve.vert</file>
+        <file>resources/shaders/curve.frag</file>
     </qresource>
 </RCC>

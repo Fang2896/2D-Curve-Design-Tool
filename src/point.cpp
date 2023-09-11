@@ -66,7 +66,6 @@ void Points::addPoint(QVector2D pos) {
     m_colorsData.append({1.0f, 1.0f, 1.0f});
 }
 
-
 bool Points::removePoint(const Point& point) {
     auto it = std::find(m_points.begin(), m_points.end(), point);
     if(it != m_points.end()) {

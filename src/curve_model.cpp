@@ -9,6 +9,10 @@ void CurveModel::clearData() {
 
 }
 
+void CurveModel::setResolution(int res) {
+    resolution = res;
+}
+
 int CurveModel::getPointsSize() {
     return m_points->getPointsSize();
 }
@@ -57,5 +61,48 @@ int CurveModel::findNearestPointInRange(QVector2D clickPos, float radius) {
 
     return nearestPointIndex;
 }
+
+void CurveModel::updatePolyInterCurveData() {
+    m_polyInterCurveData.clear();
+
+    if(m_points->getPointsSize() < 2) {
+        return;
+    }
+
+    Eigen::VectorXd xvals, yvals;
+    std::tie(xvals, yvals) = UtilFunc::convertPoints(m_points->getPointsData());
+    Eigen::VectorXd coeffs = UtilFunc::polynomialInterpolateCoeff(xvals, yvals);
+
+    // sample points
+    double step = (double)width / (double)resolution;
+    for(int i = 0; i <= resolution; i++) {
+        double x = -(float)width / 2.0f + i * step;
+        double y = 0;
+        for(int j = 0; j < xvals.size(); j++) {
+            y += coeffs[j] * std::pow(x, j);
+        }
+        m_polyInterCurveData.push_back(QVector2D(x, y));
+    }
+
+}
+
+const QVector<QVector2D>& CurveModel::getPolyInterCurveData() const {
+    return m_polyInterCurveData;
+}
+
+// boolean functions
+bool CurveModel::getPolyInterCurveStatus() {
+    return displayPolyInterCurve;
+}
+
+int CurveModel::getPolyInterCurveDataSize() {
+    return m_polyInterCurveData.size();
+}
+
+void CurveModel::setPolyInterCurveStatus(bool status) {
+    displayPolyInterCurve = status;
+}
+
+
 
 

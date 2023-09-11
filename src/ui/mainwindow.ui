@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>756</width>
-    <height>461</height>
+    <width>833</width>
+    <height>481</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QStackedWidget" name="curveControlStackedWidget">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>40</y>
+     <x>610</x>
+     <y>50</y>
      <width>211</width>
      <height>361</height>
     </rect>
@@ -32,13 +32,36 @@
     <number>1</number>
    </property>
    <widget class="QWidget" name="page"/>
-   <widget class="QWidget" name="page_2"/>
+   <widget class="QWidget" name="page_2">
+    <widget class="QPushButton" name="polyInterPushButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>191</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Polynomial Interpolation</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QLabel" name="titleLabel">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>0</y>
+     <x>610</x>
+     <y>10</y>
      <width>211</width>
      <height>41</height>
     </rect>
@@ -61,8 +84,8 @@
   <widget class="QPushButton" name="clearButton">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>410</y>
+     <x>610</x>
+     <y>420</y>
      <width>211</width>
      <height>31</height>
     </rect>

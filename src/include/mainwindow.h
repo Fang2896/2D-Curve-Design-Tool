@@ -31,7 +31,7 @@ public:
 
 private slots:
     void onClearCanvas();
-
+    void onDisplayPolyInterCurve();
 
 // private variables
 private:
@@ -43,6 +43,7 @@ private:
     // widgets
     QStackedWidget *m_curveControlStackedWidget;
     QLabel *m_titleLabel;
+    QPushButton *m_polyInterButton;
     QPushButton *m_clearButton;
 
 // private function

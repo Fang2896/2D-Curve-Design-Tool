@@ -12,6 +12,8 @@
 #include "curve_model.h"
 #include "shader.h"
 
+#include "grid.h"
+
 
 class GLRenderer : public QOpenGLWidget
 {
@@ -39,6 +41,8 @@ private:
     CurveModel &m_model;
     CurveType m_currentCurveType;
 
+    std::unique_ptr<Grid> m_grid;
+
     QOpenGLFunctions_4_3_Core *core;
 
     // VAOs, VBOs
@@ -46,11 +50,16 @@ private:
     GLuint pointsVBO;
     GLuint pointsColorVBO;
 
+    GLuint polyInterVAO;
+    GLuint polyInterVBO;
+
     // shaders
     std::unique_ptr<Shader> pointShader;
+    std::unique_ptr<Shader> gridShader;
+    std::unique_ptr<Shader> curveShader;
 
     // utils variables
-    int selectedPointIndex = -1;    // 我发现点的id就是index。草！
+    int selectedPointIndex = -1;    // 点的id就是index
 
 // private function
 private:

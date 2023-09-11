@@ -9,8 +9,10 @@
 #include <QVector2D>
 
 #include <memory>
+#include <Eigen/Dense>
 
 #include "point.h"
+#include "util_func.h"
 
 
 enum class CurveType {
@@ -23,14 +25,17 @@ enum class CurveType {
 class CurveModel
 {
 public:
-    CurveModel() {
+    CurveModel(int w, int h)
+        : width(w), height(h)
+    {
         m_points = std::make_unique<Points>();
+        resolution = 5000;
     }
 
-    // public data
-
+    // public variables
 
     void clearData();
+    void setResolution(int res);
 
     int getPointsSize();
     const QVector2D* getPointsData() const;
@@ -42,26 +47,29 @@ public:
     void addPoint(QVector2D pos);
     int findNearestPointInRange(QVector2D clickPos, float radius);
 
+    // curve data getter and setter and updater
     // class 1 : fitting curve
-    QVector<QVector2D> getPolynomialInterpolationCurve() const;
-    QVector<QVector2D> getGaussianRBFInterpolationCurve() const;
-    QVector<QVector2D> getPolynomialRegressionCurve() const;
+    // TODO: 这些curve可以整合为一个类中去，这些方法就不用一直写了
+    //  还可以在CurveModel里面进行一个是否显示的判断
+    void updatePolyInterCurveData();
+    const QVector<QVector2D>& getPolyInterCurveData() const;
+    bool getPolyInterCurveStatus();
+    int getPolyInterCurveDataSize();
+    void setPolyInterCurveStatus(bool status);
 
-    // class 2 : parameterization curve
-    QVector<QVector2D> getUniformParameterizedCurve() const;
-    QVector<QVector2D> getChordalParameterizedCurve() const;
-    QVector<QVector2D> getCentripetalParameterizedCurve() const;
-
-    // class 3 : bezier curve
-    QVector<QVector2D> getBezierCurve() const;
 
 private:
     // QVector<Point> m_points;
     std::unique_ptr<Points> m_points;
 
-    // 其他曲线相关数据
-    // ...
+    QVector<QVector2D> m_polyInterCurveData;
 
+    int width;
+    int height;
+    int resolution;
+
+    // display curve booleans
+    bool displayPolyInterCurve = false;
 };
 
 

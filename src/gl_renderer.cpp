@@ -20,13 +20,17 @@ void GLRenderer::initializeGL() {
 
     core->glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
     core->glEnable(GL_POINT_SPRITE);
+    core->glEnable(GL_LINE_SMOOTH);
 
+    // other stuffs...
     initBuffers();
     initShaders();
 
     QMatrix4x4 model;
     model.setToIdentity();
     pointShader->use().setMatrix4f("model", model);
+    gridShader->use().setMatrix4f("model", model);
+    curveShader->use().setMatrix4f("model", model);
 }
 
 void GLRenderer::resizeGL(int w, int h) {
@@ -34,13 +38,25 @@ void GLRenderer::resizeGL(int w, int h) {
 
     // modify drawing curves' size ...
 
-
+    // qDebug() << "Change Size --> " << w << ", " << h;
 }
 
 void GLRenderer::paintGL() {
     core->glClear(GL_COLOR_BUFFER_BIT);
 
     updateViewProjectMatrix();
+
+    gridShader->use();
+    m_grid->drawGrid();
+
+    if(m_model.getPolyInterCurveStatus()) {
+        curveShader->use().setColor("color" ,QColor(255, 0, 0));
+
+        core->glBindVertexArray(polyInterVAO);
+        core->glLineWidth(4.0f);
+        core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getPolyInterCurveDataSize());
+        core->glBindVertexArray(0);
+    }
 
     // draw
     pointShader->use();
@@ -49,9 +65,11 @@ void GLRenderer::paintGL() {
     core->glBindVertexArray(0);
 
     // others ...
+
 }
 
 void GLRenderer::updatePointsBuffer() {
+    // point position and color
     core->glBindBuffer(GL_ARRAY_BUFFER, pointsVBO);
     core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getPointsSize(),
                        m_model.getPointsData(), GL_STATIC_DRAW);
@@ -66,6 +84,13 @@ void GLRenderer::updatePointsBuffer() {
 void GLRenderer::updateCurveBuffer() {
     // 更新曲线的buffer等。重新计算数据
 
+    // update PolyInter
+    m_model.updatePolyInterCurveData();
+
+    core->glBindBuffer(GL_ARRAY_BUFFER, polyInterVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getPolyInterCurveDataSize(),
+                       m_model.getPolyInterCurveData().data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void GLRenderer::updateCanvas() {
@@ -74,7 +99,6 @@ void GLRenderer::updateCanvas() {
     update();
 }
 
-
 // other functions
 void GLRenderer::setCurrentCurveType(CurveType type) {
     m_currentCurveType = type;
@@ -82,7 +106,12 @@ void GLRenderer::setCurrentCurveType(CurveType type) {
 }
 
 void GLRenderer::initBuffers() {
-    /*********** VBO **********/
+    /*********** Grid **********/
+    m_grid = std::make_unique<Grid>(width(), height());
+    m_grid->init();
+
+    /*********** Point **********/
+    // VBO
     core->glGenBuffers(1, &pointsVBO);
     core->glBindBuffer(GL_ARRAY_BUFFER, pointsVBO);
     core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getPointsSize(),
@@ -95,7 +124,7 @@ void GLRenderer::initBuffers() {
                        m_model.getColorsData(), GL_STATIC_DRAW);
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    /*********** VAO **********/
+    // VAO
     core->glGenVertexArrays(1, &pointsVAO);
     core->glBindVertexArray(pointsVAO);
 
@@ -110,12 +139,37 @@ void GLRenderer::initBuffers() {
                                 3 * sizeof(float), (void*) nullptr);
 
     core->glBindVertexArray(0);
+
+    /*********** PolyInter Curve **********/
+    core->glGenBuffers(1, &polyInterVBO);
+    core->glBindBuffer(GL_ARRAY_BUFFER, polyInterVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getPolyInterCurveDataSize(),
+                       m_model.getPolyInterCurveData().data(), GL_STATIC_DRAW);
+
+    core->glGenVertexArrays(1, &polyInterVAO);
+    core->glBindVertexArray(polyInterVAO);
+
+    core->glEnableVertexAttribArray(0);
+    core->glBindBuffer(GL_ARRAY_BUFFER, polyInterVBO);
+
+    core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                                2 * sizeof(float), (void*) nullptr);
+
+    core->glBindVertexArray(0);
 }
 
 void GLRenderer::initShaders() {
     pointShader = std::make_unique<Shader>(this);
     pointShader->compile(":/resources/shaders/point.vert",
                          ":/resources/shaders/point.frag");
+
+    gridShader = std::make_unique<Shader>(this);
+    gridShader->compile(":/resources/shaders/grid.vert",
+                         ":/resources/shaders/grid.frag");
+
+    curveShader = std::make_unique<Shader>(this);
+    curveShader->compile(":/resources/shaders/curve.vert",
+                        ":/resources/shaders/curve.frag");
 
     // other shaders...
 
@@ -132,6 +186,10 @@ void GLRenderer::updateViewProjectMatrix() {
 
     pointShader->use().setMatrix4f("view", view);
     pointShader->use().setMatrix4f("projection", projection);
+    gridShader->use().setMatrix4f("view", view);
+    gridShader->use().setMatrix4f("projection", projection);
+    curveShader->use().setMatrix4f("view", view);
+    curveShader->use().setMatrix4f("projection", projection);
 
     // other curves...
 }

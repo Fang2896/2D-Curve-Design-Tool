@@ -11,11 +11,14 @@
 
 /***** Parameters *****/
 const int OGLMANAGER_WIDTH = 800;
-const int OGLMANAGER_HEIGHT = 400;
+const int OGLMANAGER_HEIGHT = 600;
+
+const int CURVE_DISPLAY_RANGE_WIDTH = 2000;
+const int CURVE_DISPLAY_RANGE_HEIGHT = 2000;
 
 
 MainWindow::MainWindow(QWidget *parent)
-    : QWidget(parent), ui(new Ui::MainWindow), m_model()
+    : QWidget(parent), ui(new Ui::MainWindow), m_model(CURVE_DISPLAY_RANGE_WIDTH, CURVE_DISPLAY_RANGE_HEIGHT)
 {
     ui->setupUi(this);
 
@@ -42,10 +45,17 @@ void MainWindow::onClearCanvas() {
     m_glRenderer->updateCanvas();
 }
 
+void MainWindow::onDisplayPolyInterCurve() {
+    m_model.setPolyInterCurveStatus(m_polyInterButton->isChecked());
+    qDebug() << "PolyInter Status set: " << m_polyInterButton->isChecked();
+    m_glRenderer->update();
+}
+
 void MainWindow::configureLayout() {
     m_titleLabel = ui->titleLabel;
     m_curveControlStackedWidget = ui->curveControlStackedWidget;
     m_clearButton = ui->clearButton;
+    m_polyInterButton = m_curveControlStackedWidget->findChild<QPushButton*>("polyInterPushButton");
 
     // layout:
     auto vDashLayout = new QVBoxLayout;
@@ -65,6 +75,11 @@ void MainWindow::connectSignal() {
             &QPushButton::clicked,
             this,
             &MainWindow::onClearCanvas);
+
+    connect(m_polyInterButton,
+            &QPushButton::toggled,
+            this,
+            &MainWindow::onDisplayPolyInterCurve);
 
     // others ...
 }
