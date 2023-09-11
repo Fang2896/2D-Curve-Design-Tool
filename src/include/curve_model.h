@@ -7,6 +7,7 @@
 
 #include <QVector>
 #include <QVector2D>
+
 #include <memory>
 
 #include "point.h"
@@ -33,12 +34,13 @@ public:
 
     int getPointsSize();
     const QVector2D* getPointsData() const;
-    const QColor* getColorsData() const;
+    const QVector3D* getColorsData() const;
 
-    void setPointColor(int index, QColor pointColor);
+    void setPointPosition(int index, QVector2D position);
+    void setPointColor(int index, QVector3D pointColor);
 
     void addPoint(QVector2D pos);
-    int findNearestPoint(QVector2D clickPos);
+    int findNearestPointInRange(QVector2D clickPos, float radius);
 
     // class 1 : fitting curve
     QVector<QVector2D> getPolynomialInterpolationCurve() const;

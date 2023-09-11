@@ -44,8 +44,6 @@ private:
     // VAOs, VBOs
     GLuint pointsVAO;
     GLuint pointsVBO;
-
-    GLuint pointsColorVAO;
     GLuint pointsColorVBO;
 
     // shaders

@@ -5,8 +5,10 @@
 #ifndef POINT_H
 #define POINT_H
 
-#include <QColor>
+#include <QVector>
 #include <QVector2D>
+#include <QVector3D>
+
 #include <utility>
 
 
@@ -14,14 +16,14 @@ class Point
 {
 public:
     // 颜色和size留到后面来实现
-    Point(const QVector2D& position, QColor color, float size)
-        : id(nextID++) ,m_position(position), m_color(std::move(color)), m_size(size) { }
+    Point(const QVector2D& position, QVector3D color, float size)
+        : id(nextID++) ,m_position(position), m_color(color), m_size(size) { }
 
     explicit Point(const QVector2D& position)
         : id(nextID++), m_position(position)
     {
-        m_color = Qt::white;
-        m_size = 0.1f;
+        m_color = {1.0f, 1.0f, 1.0f};
+        m_size = 1.0f;
     }
 
     int getID() const;
@@ -35,8 +37,8 @@ public:
     void setPosition(const QVector2D& position);
 
     // getter and setter for color
-    QColor getColor() const;
-    void setColor(const QColor& color);
+    QVector3D getColor() const;
+    void setColor(const QVector3D& color);
 
     // getter and setter for size
     float getSize() const;
@@ -49,7 +51,7 @@ private:
     static inline int nextID = 0;
 
     QVector2D m_position;
-    QColor m_color = Qt::white;
+    QVector3D m_color = {1.0f, 1.0f, 1.0f};
     float m_size;   // display size
 };
 
@@ -61,7 +63,7 @@ public:
 
     const QVector<Point>& getPoints() const;
     const QVector<QVector2D>& getPointsData() const;
-    const QVector<QColor>& getPointsColorData() const;
+    const QVector<QVector3D>& getPointsColorData() const;
     int getPointsSize();
 
     void addPoint(const Point& point);
@@ -70,13 +72,14 @@ public:
     bool removePoint(const Point& point);
     bool removePoint(int id);
 
-    void setPointColor(int index, QColor pointColor);
+    void setPointPosition(int index, QVector2D position);
+    void setPointColor(int index, QVector3D pointColor);
 
 private:
     // 这两个数据一定要同步！
     QVector<Point> m_points;
     QVector<QVector2D> m_pointsData;
-    QVector<QColor> m_colorsData;
+    QVector<QVector3D> m_colorsData;
 };
 
 #endif //POINT_H

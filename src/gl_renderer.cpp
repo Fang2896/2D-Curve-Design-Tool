@@ -4,6 +4,9 @@
 
 #include "gl_renderer.h"
 
+// 一些操作设置？后面感觉可以单独给个静态类
+const float PICK_RADIUS = 5.0f;
+
 
 GLRenderer::GLRenderer(CurveModel &model, QWidget* parent, int width, int height)
     : QOpenGLWidget(parent), m_model(model)
@@ -14,7 +17,9 @@ GLRenderer::GLRenderer(CurveModel &model, QWidget* parent, int width, int height
 void GLRenderer::initializeGL() {
     core = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_4_3_Core>();
     core->glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+
     core->glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    core->glEnable(GL_POINT_SPRITE);
 
     initBuffers();
     initShaders();
@@ -53,7 +58,7 @@ void GLRenderer::updatePointsBuffer() {
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     core->glBindBuffer(GL_ARRAY_BUFFER, pointsColorVBO);
-    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QColor) * m_model.getPointsSize(),
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector3D) * m_model.getPointsSize(),
                        m_model.getColorsData(), GL_STATIC_DRAW);
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -86,7 +91,7 @@ void GLRenderer::initBuffers() {
 
     core->glGenBuffers(1, &pointsColorVBO);
     core->glBindBuffer(GL_ARRAY_BUFFER, pointsColorVBO);
-    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QColor) * m_model.getPointsSize(),
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector3D) * m_model.getPointsSize(),
                        m_model.getColorsData(), GL_STATIC_DRAW);
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -98,15 +103,12 @@ void GLRenderer::initBuffers() {
     core->glBindBuffer(GL_ARRAY_BUFFER, pointsVBO);
     core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
                                 2 * sizeof(float), (void*) nullptr);
-    core->glBindVertexArray(0);
-
-    core->glGenVertexArrays(1, &pointsColorVAO);
-    core->glBindVertexArray(pointsColorVAO);
 
     core->glEnableVertexAttribArray(1);
     core->glBindBuffer(GL_ARRAY_BUFFER, pointsColorVBO);
     core->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
                                 3 * sizeof(float), (void*) nullptr);
+
     core->glBindVertexArray(0);
 }
 
@@ -136,7 +138,17 @@ void GLRenderer::updateViewProjectMatrix() {
 
 // control functions:
 void GLRenderer::mouseMoveEvent(QMouseEvent *event) {
+    if(selectedPointIndex != -1 && event->buttons() & Qt::LeftButton) {
+        // Convert mouse position to OpenGL coordinates
+        auto mouseX = (float)event->x();
+        auto mouseY = (float)event->y();
+        auto spaceX = mouseX - (float)width() / 2.0f;
+        auto spaceY = (float)height() / 2.0f - mouseY;
 
+        m_model.setPointPosition(selectedPointIndex, {spaceX, spaceY});
+
+        updateCanvas();
+    }
 }
 
 void GLRenderer::mousePressEvent(QMouseEvent *event) {
@@ -150,9 +162,10 @@ void GLRenderer::mousePressEvent(QMouseEvent *event) {
         // qDebug() << "Current Data: " << m_model.getPointsData();
         m_model.addPoint({spaceX, spaceY});
     } else if(event->button() == Qt::LeftButton) {
-        selectedPointIndex = m_model.findNearestPoint({spaceX, spaceY});
+        selectedPointIndex = m_model.findNearestPointInRange({spaceX, spaceY}, PICK_RADIUS);
         if(selectedPointIndex != -1) {
-            m_model.setPointColor(selectedPointIndex, Qt::red);
+            qDebug() << "Select Nearest Point : " << selectedPointIndex;
+            m_model.setPointColor(selectedPointIndex, {1.0f, 1.0f, 0.0f});
         }
     }
 
@@ -160,6 +173,12 @@ void GLRenderer::mousePressEvent(QMouseEvent *event) {
 }
 
 void GLRenderer::mouseReleaseEvent(QMouseEvent *event) {
+    if(selectedPointIndex != -1) {
+        qDebug() << "Release Nearest Point : " << selectedPointIndex;
+        m_model.setPointColor(selectedPointIndex, {1.0f, 1.0f, 1.0f});
+        selectedPointIndex = -1;
 
+        updateCanvas();
+    }
 }
 

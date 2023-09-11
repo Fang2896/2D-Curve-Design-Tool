@@ -15,8 +15,8 @@ QVector2D Point::getPosition() const { return m_position; }
 void Point::setPosition(const QVector2D& position) { m_position = position; }
 
 // getter and setter for color
-QColor Point::getColor() const { return m_color; }
-void Point::setColor(const QColor& color) { m_color = color; }
+QVector3D Point::getColor() const { return m_color; }
+void Point::setColor(const QVector3D& color) { m_color = color; }
 
 // getter and setter for size
 float Point::getSize() const { return m_size; }
@@ -44,7 +44,7 @@ const QVector<QVector2D>& Points::getPointsData() const {
     return m_pointsData;
 }
 
-const QVector<QColor>& Points::getPointsColorData() const {
+const QVector<QVector3D>& Points::getPointsColorData() const {
     return m_colorsData;
 }
 
@@ -63,7 +63,7 @@ void Points::addPoint(QVector2D pos) {
     qDebug() << "Add New Point, position: [" <<  pos << "], id : " << newPoint.getID();
     m_points.append(newPoint);
     m_pointsData.append(pos);
-    m_colorsData.append(Qt::white);
+    m_colorsData.append({1.0f, 1.0f, 1.0f});
 }
 
 
@@ -94,7 +94,13 @@ bool Points::removePoint(int id) {
     return false;
 }
 
-void Points::setPointColor(int index, QColor pointColor) {
+void Points::setPointPosition(int index, QVector2D position) {
+    m_points[index].setPosition(position);
+    m_pointsData[index] = position;
+}
+
+
+void Points::setPointColor(int index, QVector3D pointColor) {
     m_points[index].setColor(pointColor);
     m_colorsData[index] = pointColor;
 }
