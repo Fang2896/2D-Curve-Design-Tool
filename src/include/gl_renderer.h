@@ -67,6 +67,11 @@ private:
     GLuint centrietalParamVAO;
     GLuint centrietalParamVBO;
 
+    GLuint bezierCurveVAO;
+    GLuint bezierCurveVBO;
+    GLuint bezierControlVAO;
+    GLuint bezierControlVBO;
+
     // shaders
     std::unique_ptr<Shader> pointShader;
     std::unique_ptr<Shader> gridShader;

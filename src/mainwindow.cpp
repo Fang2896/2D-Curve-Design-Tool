@@ -42,6 +42,10 @@ MainWindow::~MainWindow()
 /********** slot functions *************/
 void MainWindow::onClearCanvas() {
     m_model.clearData();
+    if(m_model.isBezierMode) {
+        m_model.initBezierCurve();
+    }
+
     m_glRenderer->updateCanvas();
 }
 
@@ -63,6 +67,17 @@ void MainWindow::switchPage(){
     int nextPageIndex = currentStackPage % 3;
     qDebug() << "Next Page Index: " << nextPageIndex;
     m_curveControlStackedWidget->setCurrentIndex(nextPageIndex);
+
+    // 如果到了Bezier Page，需要进行初始化, 且设置m_model中的模式
+    if(nextPageIndex == 2) {
+        m_model.isBezierMode = true;
+        m_model.initBezierCurve();
+        m_displayBezierCurveCheckBox->setCheckState(Qt::Checked);
+        m_displayBezierControlLineCheckBox->setCheckState(Qt::Checked);
+        m_glRenderer->updateCanvas();
+    } else {
+        m_model.isBezierMode = false;
+    }
 }
 
 void MainWindow::onDisplayPolyInterCurve() {
@@ -134,6 +149,25 @@ void MainWindow::onDisplayCentrietalParamCurve() {
     m_glRenderer->update();
 }
 
+void MainWindow::onDisplayBezierCurve(int state) {
+    if (state == Qt::Checked) {
+        m_model.setBezierCurveStatus(true);
+    } else if (state == Qt::Unchecked) {
+        m_model.setBezierCurveStatus(false);
+    }
+
+    m_glRenderer->updateCanvas();
+}
+
+void MainWindow::onDisplayBezierControlLine(int state) {
+    if (state == Qt::Checked) {
+        m_model.setBezierControlLineStatus(true);
+    } else if (state == Qt::Unchecked) {
+        m_model.setBezierControlLineStatus(false);
+    }
+
+    m_glRenderer->updateCanvas();
+}
 
 void MainWindow::configureLayout() {
     m_titleLabel = ui->titleLabel;
@@ -144,12 +178,16 @@ void MainWindow::configureLayout() {
     m_polyRegreOrderLabel = ui->polyRegreOrderLabel;
     m_polyRegreLambdaLabel = ui->polyRegreLambdaLabel;
 
+    m_bezierTitle = ui->bezierCurveTitle;
+    m_bezierContinuityLabel = ui->bezierContinuityLabel;
+
     m_resolutionLabel = ui->resolutionLabel;
 
     m_curveControlStackedWidget = ui->curveControlStackedWidget;
     m_curveControlStackedWidget->setCurrentIndex(1);    // 初始页面为1
     m_paramPage = m_curveControlStackedWidget->widget(0);
     m_interpolationPage = m_curveControlStackedWidget->widget(1);
+    m_bezierPage = m_curveControlStackedWidget->widget(2);
 
     m_clearButton = ui->clearButton;
     m_pageSwitchButton = ui->pageSwitchPushButton;
@@ -165,6 +203,10 @@ void MainWindow::configureLayout() {
     m_RBFSigmaSpinBox = ui->RBFSigmaSpinBox;
     m_polyRegreOrderSpinBox = ui->polyRegreOrderSpinBox;
     m_polyRegreLambdaSpinBox = ui->polyRegreLambdaSpinBox;
+
+    m_displayBezierCurveCheckBox = ui->displayBezierCurveCheckBox;
+    m_displayBezierControlLineCheckBox = ui->displayControlLineCheckBox;
+    m_bezierContinuityComboBox = ui->BezierContinuityComboBox;
 
     m_resolutionSpinBox = ui->resolutionSpinBox;
 
@@ -185,6 +227,10 @@ void MainWindow::configureLayout() {
     hPolyRegreLambdaLayout->addWidget(m_polyRegreLambdaLabel);
     hPolyRegreLambdaLayout->addWidget(m_polyRegreLambdaSpinBox);
 
+    auto hBezierContinuityLayout = new QHBoxLayout;
+    hBezierContinuityLayout->addWidget(m_bezierContinuityLabel);
+    hBezierContinuityLayout->addWidget(m_bezierContinuityComboBox);
+
     auto vInterLayout = new QVBoxLayout;
     vInterLayout->addWidget(m_interPageLabel);
     vInterLayout->addWidget(m_polyInterButton);
@@ -203,6 +249,14 @@ void MainWindow::configureLayout() {
     vParamLayout->addWidget(m_centrietalParamButton);
     vParamLayout->addStretch(1);
     m_paramPage->setLayout(vParamLayout);
+
+    auto vBezierLayout = new QVBoxLayout;
+    vBezierLayout->addWidget(m_bezierTitle);
+    vBezierLayout->addLayout(hBezierContinuityLayout);
+    vBezierLayout->addWidget(m_displayBezierCurveCheckBox);
+    vBezierLayout->addWidget(m_displayBezierControlLineCheckBox);
+    vBezierLayout->addStretch(1);
+    m_bezierPage->setLayout(vBezierLayout);
 
     auto vDashLayout = new QVBoxLayout;
     vDashLayout->addWidget(m_titleLabel);
@@ -282,6 +336,15 @@ void MainWindow::connectSignal() {
             this,
             &MainWindow::onDisplayCentrietalParamCurve);
 
+    connect(m_displayBezierCurveCheckBox,
+            &QCheckBox::stateChanged,
+            this,
+            &MainWindow::onDisplayBezierCurve);
+
+    connect(m_displayBezierControlLineCheckBox,
+            &QCheckBox::stateChanged,
+            this,
+            &MainWindow::onDisplayBezierControlLine);
 
 
     // others ...
@@ -296,5 +359,8 @@ void MainWindow::releaseAllButtons() {
     m_uniformParamButton->setChecked(false);
     m_chordalParamButton->setChecked(false);
     m_centrietalParamButton->setChecked(false);
+
+    m_displayBezierCurveCheckBox->setCheckState(Qt::Unchecked);
+    m_displayBezierControlLineCheckBox->setCheckState(Qt::Unchecked);
 }
 

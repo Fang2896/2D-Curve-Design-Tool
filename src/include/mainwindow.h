@@ -10,6 +10,8 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QDoubleSpinBox>
+#include <QCheckBox>
+#include <QComboBox>
 
 #include "curve_model.h"
 #include "gl_renderer.h"
@@ -49,6 +51,9 @@ private slots:
     void onDisplayChordalParamCurve();
     void onDisplayCentrietalParamCurve();
 
+    void onDisplayBezierCurve(int state);
+    void onDisplayBezierControlLine(int state);
+
 // private variables
 private:
     Ui::MainWindow *ui;
@@ -62,6 +67,7 @@ private:
 
     QWidget *m_paramPage;
     QWidget *m_interpolationPage;
+    QWidget *m_bezierPage;
 
     QLabel *m_titleLabel;
     QLabel *m_interPageLabel;
@@ -71,8 +77,10 @@ private:
     QLabel *m_polyRegreOrderLabel;
     QLabel *m_polyRegreLambdaLabel;
 
-    QLabel *m_resolutionLabel;
+    QLabel *m_bezierTitle;
+    QLabel *m_bezierContinuityLabel;
 
+    QLabel *m_resolutionLabel;
 
     QPushButton *m_polyInterButton;
     QPushButton *m_RBFInterButton;
@@ -91,6 +99,10 @@ private:
 
     QDoubleSpinBox *m_resolutionSpinBox;
 
+    QCheckBox *m_displayBezierCurveCheckBox;
+    QCheckBox *m_displayBezierControlLineCheckBox;
+    // TODO: 待实现Continuity转换
+    QComboBox *m_bezierContinuityComboBox;
 
 // private function
 private:

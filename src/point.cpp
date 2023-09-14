@@ -98,10 +98,26 @@ void Points::setPointPosition(int index, QVector2D position) {
     m_pointsData[index] = position;
 }
 
+void Points::movePointDeltaPosition(int index, QVector2D deltaPos) {
+    QVector2D newPos = m_pointsData[index] + deltaPos;
+    m_points[index].setPosition(newPos);
+    m_pointsData[index] = newPos;
+}
+
 
 void Points::setPointColor(int index, QVector3D pointColor) {
     m_points[index].setColor(pointColor);
     m_colorsData[index] = pointColor;
+}
+
+QVector2D Points::getIndexPosition(int index) {
+    int size = getPointsSize();
+    if(index >= size || (index < 0 && std::abs(index) > size)) {
+        qDebug() << "Index Out of Range!";
+        throw std::out_of_range("Index out of range");
+    }
+
+    return index >= 0 ? m_pointsData[index] : m_pointsData[size + index];
 }
 
 

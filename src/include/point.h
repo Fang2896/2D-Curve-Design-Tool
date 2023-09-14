@@ -73,6 +73,9 @@ public:
     bool removePoint(int id);
 
     void setPointPosition(int index, QVector2D position);
+    void movePointDeltaPosition(int index, QVector2D deltaPos);
+    QVector2D getIndexPosition(int index);
+
     void setPointColor(int index, QVector3D pointColor);
 
 private:

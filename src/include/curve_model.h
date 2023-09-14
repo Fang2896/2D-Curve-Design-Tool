@@ -33,6 +33,7 @@ public:
     }
 
     // public variables
+    bool isBezierMode = false;
 
     void clearData();
     void setResolution(int res);
@@ -48,15 +49,14 @@ public:
     int findNearestPointInRange(QVector2D clickPos, float radius);
 
     // curve data getter and setter and updater
-    // class 1 : fitting curve
-    // TODO: 这些curve可以整合为一个类中去，这些方法就不用一直写了 (但要考虑很多传递)
-    //  还可以在CurveModel里面进行一个是否显示的判断
+    // 1: poly inter
     void updatePolyInterCurveData();
     const QVector<QVector2D>& getPolyInterCurveData() const;
     bool getPolyInterCurveStatus() const;
     void setPolyInterCurveStatus(bool status);
     int getPolyInterCurveDataSize();
 
+    // 2: RBF inter
     void updateRBFInterCurveData();
     void updateRBFInterSigma(float sigmaValue);
     const QVector<QVector2D>& getRBFInterCurveData() const;
@@ -64,6 +64,7 @@ public:
     void setRBFInterCurveStatus(bool status);
     int getRBFInterCurveDataSize();
 
+    // 3: poly regre
     void updatePolyRegreCurveData();
     void updatePolyRegreOrder(int order);
     void updatePolyRegreLambda(float lambda);
@@ -72,24 +73,46 @@ public:
     void setPolyRegreCurveStatus(bool status);
     int getPolyRegreCurveDataSize();
 
+    // 4: uniform param
     void updateUniformParamCurveData();
     const QVector<QVector2D>& getUniformParamCurveData() const;
     bool getUniformParamCurveStatus() const;
     void setUniformParamCurveStatus(bool status);
     int getUniformParamCurveDataSize();
 
+    // 5: chordal param
     void updateChordalParamCurveData();
     const QVector<QVector2D>& getChordalParamCurveData() const;
     bool getChordalParamCurveStatus() const;
     void setChordalParamCurveStatus(bool status);
     int getChordalParamCurveDataSize();
 
+    // 6: centrietal param
     void updateCentrietalParamCurveData();
     const QVector<QVector2D>& getCentrietalParamCurveData() const;
     bool getCentrietalParamCurveStatus() const;
     void setCentrietalParamCurveStatus(bool status);
     int getCentrietalParamCurveDataSize();
 
+    // 7: bezier curve
+    void initBezierCurve();
+    void addBezierSegment(QVector2D anchorPos);
+    QVector<QVector2D> getPointsInSegment(int i);
+    int getNumOfSegment();
+
+    void updateBezierData();
+
+    const QVector<QVector2D>& getBezierCurveData() const;
+    const QVector<QVector2D>& getBezierControlLineData() const;
+
+    bool getBezierCurveStatus() const;
+    bool getBezierControlLineStatus() const;
+
+    void setBezierCurveStatus(bool status);
+    void setBezierControlLineStatus(bool status);
+
+    int getBezierCurveDataSize();
+    int getBezierControlLineDataSize();
 
 private:
     // QVector<Point> m_points;
@@ -108,6 +131,11 @@ private:
     QVector<QVector2D> m_chordalParamCurveData;
     QVector<QVector2D> m_centrietalCurveData;
 
+    // 曲线采样点
+    QVector<QVector2D> m_bezierCurveData;
+    // 控制线
+    QVector<QVector2D> m_controlLineData;
+
     int width;
     int height;
     int resolution;
@@ -119,6 +147,8 @@ private:
     bool displayUniformParamCurve = false;
     bool displayChordalParamCurve = false;
     bool displayCentrietalParamCurve = false;
+    bool displayBezierCurve = false;
+    bool displayBezierControlLine = false;
 
 };
 

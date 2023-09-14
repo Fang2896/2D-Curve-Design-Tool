@@ -99,6 +99,7 @@ void GLRenderer::paintGL() {
         core->glBindVertexArray(0);
     }
 
+    // centrietal param
     if(m_model.getCentrietalParamCurveStatus()) {
         curveShader->use().setColor("color" ,Qt::blue);
 
@@ -106,6 +107,28 @@ void GLRenderer::paintGL() {
         core->glLineWidth(4.0f);
         core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getCentrietalParamCurveDataSize());
         core->glBindVertexArray(0);
+    }
+
+    // bezier curve
+    if(m_model.isBezierMode) {
+        if(m_model.getBezierCurveStatus()) {
+            curveShader->use().setColor("color" ,Qt::red);
+
+            core->glBindVertexArray(bezierCurveVAO);
+            core->glLineWidth(2.0f);
+            core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getBezierCurveDataSize());
+            core->glBindVertexArray(0);
+        }
+
+        // bezier control line
+        if(m_model.getBezierControlLineStatus()) {
+            curveShader->use().setColor("color" ,Qt::blue);
+
+            core->glBindVertexArray(bezierControlVAO);
+            core->glLineWidth(3.0f);
+            core->glDrawArrays(GL_LINES, 0, m_model.getBezierControlLineDataSize());
+            core->glBindVertexArray(0);
+        }
     }
 
     // draw
@@ -176,6 +199,22 @@ void GLRenderer::updateCurveBuffer() {
     core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getCentrietalParamCurveDataSize(),
                        m_model.getCentrietalParamCurveData().data(), GL_STATIC_DRAW);
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // update bezier curve
+    if(m_model.isBezierMode) {
+        m_model.updateBezierData();
+        core->glBindBuffer(GL_ARRAY_BUFFER, bezierCurveVBO);
+        core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getBezierCurveDataSize(),
+                           m_model.getBezierCurveData().data(), GL_STATIC_DRAW);
+        core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        // update bezier control line
+        core->glBindBuffer(GL_ARRAY_BUFFER, bezierControlVBO);
+        core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getBezierControlLineDataSize(),
+                           m_model.getBezierControlLineData().data(), GL_STATIC_DRAW);
+        core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
 }
 
 void GLRenderer::updateCanvas() {
@@ -327,6 +366,40 @@ void GLRenderer::initBuffers() {
 
     core->glBindVertexArray(0);
 
+    /*********** Bezier Curve **********/
+    core->glGenBuffers(1, &bezierCurveVBO);
+    core->glBindBuffer(GL_ARRAY_BUFFER, bezierCurveVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getBezierCurveDataSize(),
+                       m_model.getBezierCurveData().data(), GL_STATIC_DRAW);
+
+    core->glGenVertexArrays(1, &bezierCurveVAO);
+    core->glBindVertexArray(bezierCurveVAO);
+
+    core->glEnableVertexAttribArray(0);
+    core->glBindBuffer(GL_ARRAY_BUFFER, bezierCurveVBO);
+
+    core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                                2 * sizeof(float), (void*) nullptr);
+
+    core->glBindVertexArray(0);
+
+    /*********** Bezier Control Line **********/
+    core->glGenBuffers(1, &bezierControlVBO);
+    core->glBindBuffer(GL_ARRAY_BUFFER, bezierControlVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getBezierControlLineDataSize(),
+                       m_model.getBezierControlLineData().data(), GL_STATIC_DRAW);
+
+    core->glGenVertexArrays(1, &bezierControlVAO);
+    core->glBindVertexArray(bezierControlVAO);
+
+    core->glEnableVertexAttribArray(0);
+    core->glBindBuffer(GL_ARRAY_BUFFER, bezierControlVBO);
+
+    core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                                2 * sizeof(float), (void*) nullptr);
+
+    core->glBindVertexArray(0);
+
 }
 
 void GLRenderer::initShaders() {
@@ -389,7 +462,12 @@ void GLRenderer::mousePressEvent(QMouseEvent *event) {
     // Convert mouse position to OpenGL coordinates
     if(event->modifiers() & Qt::ControlModifier && event->button() == Qt::LeftButton) {
         // qDebug() << "Current Data: " << m_model.getPointsData();
-        m_model.addPoint({spaceX, spaceY});
+        if(m_model.isBezierMode) {
+            m_model.addBezierSegment({spaceX, spaceY});
+        } else {
+            m_model.addPoint({spaceX, spaceY});
+        }
+
     } else if(event->button() == Qt::LeftButton) {
         selectedPointIndex = m_model.findNearestPointInRange({spaceX, spaceY}, PICK_RADIUS);
         if(selectedPointIndex != -1) {

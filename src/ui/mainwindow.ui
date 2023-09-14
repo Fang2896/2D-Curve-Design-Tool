@@ -29,7 +29,7 @@
     <enum>QFrame::StyledPanel</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="ParameterizePage">
     <widget class="QLabel" name="paramCurveTitle">
@@ -369,7 +369,131 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="BezierPage"/>
+   <widget class="QWidget" name="BezierPage">
+    <widget class="QLabel" name="bezierCurveTitle">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>211</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>13</pointsize>
+       <weight>75</weight>
+       <italic>true</italic>
+       <bold>true</bold>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>Bezier Curve</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="BezierContinuityComboBox">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>50</y>
+       <width>81</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="currentIndex">
+      <number>2</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>G0</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>G1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>G2</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="bezierContinuityLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Continuity: </string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="displayControlLineCheckBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Display Control Line</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="displayBezierCurveCheckBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Display Bezier Curve</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QLabel" name="titleLabel">
    <property name="geometry">
@@ -399,7 +523,7 @@
    <property name="geometry">
     <rect>
      <x>590</x>
-     <y>440</y>
+     <y>410</y>
      <width>211</width>
      <height>31</height>
     </rect>
@@ -417,8 +541,8 @@
   <widget class="QPushButton" name="pageSwitchPushButton">
    <property name="geometry">
     <rect>
-     <x>580</x>
-     <y>380</y>
+     <x>590</x>
+     <y>370</y>
      <width>211</width>
      <height>31</height>
     </rect>

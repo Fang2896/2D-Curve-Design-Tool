@@ -26,6 +26,26 @@ const QVector3D* CurveModel::getColorsData() const {
 }
 
 void CurveModel::setPointPosition(int index, QVector2D position) {
+    if(isBezierMode) {
+        QVector2D deltaPos = position - m_points->getIndexPosition(index);
+
+        if(index % 3 == 0) {    // anchor point
+            if(index == 0) {
+                m_points->movePointDeltaPosition(index + 1, deltaPos);
+            } else if(index == m_points->getPointsSize() - 1) {
+                m_points->movePointDeltaPosition(index - 1, deltaPos);
+            } else {
+                m_points->movePointDeltaPosition(index + 1, deltaPos);
+                m_points->movePointDeltaPosition(index - 1, deltaPos);
+            }
+        } else if (index != 1 && index != m_points->getPointsSize() - 2){                // control point
+            // TODO: 根据continuity决定move行为， 目前先G0连续吧
+            int neighborIndex = index % 3 == 1 ? index - 2 : index + 2;
+            m_points->movePointDeltaPosition(neighborIndex, -1.0f * deltaPos);
+            m_points->setPointPosition(index, position);
+        }
+    }
+
     m_points->setPointPosition(index, position);
 }
 
@@ -374,6 +394,112 @@ int CurveModel::getCentrietalParamCurveDataSize() {
     return m_centrietalCurveData.size();
 }
 
+/********* Bezier Curve ***********/
+void CurveModel::initBezierCurve() {
+    clearData();
 
+    QVector2D center = QVector2D(0.0f, 0.0f);
+    // 用m_points, 同时存储anchor和control points
+    m_points->addPoint(center + QVector2D(-100.0f, 0.0f));   // anchor 0
+    m_points->addPoint(center + QVector2D(-50.0f, 50.0f));  // control 1
+    m_points->addPoint(center + QVector2D(50.0f, -50.0f));   // control 2
+    m_points->addPoint(center + QVector2D(100.0f, 0.0f));   // anchor 3
+}
+
+void CurveModel::addBezierSegment(QVector2D anchorPos) {
+    QVector2D last1 = m_points->getIndexPosition(-1);
+    QVector2D last2 = m_points->getIndexPosition(-2);
+
+    QVector2D newControlPoint0 = 2 * last1 - last2;
+    QVector2D newControlPoint1 = (anchorPos + newControlPoint0) / 2.0f;
+
+    m_points->addPoint(newControlPoint0);
+    m_points->addPoint(newControlPoint1);
+    m_points->addPoint(anchorPos);
+}
+
+QVector<QVector2D> CurveModel::getPointsInSegment(int i) {
+    const QVector<QVector2D> data = m_points->getPointsData();
+    return QVector<QVector2D>{data[i*3],    // anchor 0
+                              data[i*3+1],  // control 1
+                              data[i*3+2],  // control 2
+                              data[i*3+3]}; // anchor 3
+}
+
+int CurveModel::getNumOfSegment() {
+    return (m_points->getPointsSize() - 4) / 3 + 1;
+}
+
+void CurveModel::updateBezierData() {
+    m_bezierCurveData.clear();
+    m_controlLineData.clear();
+
+    // 暂时不考虑增量型增加点， 因为移动的话，考虑起来很麻烦
+    int segNum = getNumOfSegment();
+    float step = 5.0f / (float)resolution;
+
+    for(int i = 0; i < segNum; i++) {
+        QVector<QVector2D> segPoints = getPointsInSegment(i);
+        QVector2D p0 = segPoints[0];
+        QVector2D p1 = segPoints[1];
+        QVector2D p2 = segPoints[2];
+        QVector2D p3 = segPoints[3];
+
+        // 曲线部分
+        for(float t = 0; t <= 1; t += step) {
+            float u = 1 - t;
+            float tt = t * t;
+            float uu = u * u;
+            float uuu = uu * u;
+            float ttt = tt * t;
+
+            QVector2D p = uuu * p0; // (1-t)^3 * P0
+            p += 3 * uu * t * p1; // 3(1-t)^2 * t * P1
+            p += 3 * u * tt * p2; // 3(1-t) * t^2 * P2
+            p += ttt * p3; // t^3 * P3
+
+            m_bezierCurveData.append(p);
+        }
+
+        // 控制线部分, 注意这里要两个两个点画
+        m_controlLineData.append(p0);
+        m_controlLineData.append(p1);
+        m_controlLineData.append(p2);
+        m_controlLineData.append(p3);
+    }
+}
+
+
+const QVector<QVector2D>& CurveModel::getBezierCurveData() const {
+    return m_bezierCurveData;
+}
+
+const QVector<QVector2D>& CurveModel::getBezierControlLineData() const {
+    return m_controlLineData;
+}
+
+bool CurveModel::getBezierCurveStatus() const {
+    return displayBezierCurve;
+}
+
+bool CurveModel::getBezierControlLineStatus() const {
+    return displayBezierControlLine;
+}
+
+void CurveModel::setBezierCurveStatus(bool status) {
+    displayBezierCurve = status;
+}
+
+void CurveModel::setBezierControlLineStatus(bool status) {
+    displayBezierControlLine = status;
+}
+
+int CurveModel::getBezierCurveDataSize() {
+    return m_bezierCurveData.size();
+}
+
+int CurveModel::getBezierControlLineDataSize() {
+    return m_controlLineData.size();
+}
 
 
