@@ -22,8 +22,7 @@ public:
     explicit GLRenderer(CurveModel &model, QWidget* parent = nullptr,
                         int width = 800, int height = 400);
 
-
-    void setCurrentCurveType(CurveType type);
+//    void setCurrentCurveType(CurveType type);
     void updateCanvas();
 
 
@@ -39,7 +38,7 @@ protected:
 // variables
 private:
     CurveModel &m_model;
-    CurveType m_currentCurveType;
+    // CurveType m_currentCurveType;
 
     std::unique_ptr<Grid> m_grid;
 
@@ -52,6 +51,21 @@ private:
 
     GLuint polyInterVAO;
     GLuint polyInterVBO;
+
+    GLuint RBFInterVAO;
+    GLuint RBFInterVBO;
+
+    GLuint polyRegreVAO;
+    GLuint polyRegreVBO;
+
+    GLuint uniformParamVAO;
+    GLuint uniformParamVBO;
+
+    GLuint chordalParamVAO;
+    GLuint chordalParamVBO;
+
+    GLuint centrietalParamVAO;
+    GLuint centrietalParamVBO;
 
     // shaders
     std::unique_ptr<Shader> pointShader;

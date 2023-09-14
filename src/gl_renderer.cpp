@@ -49,12 +49,62 @@ void GLRenderer::paintGL() {
     gridShader->use();
     m_grid->drawGrid();
 
+    // poly inter
     if(m_model.getPolyInterCurveStatus()) {
-        curveShader->use().setColor("color" ,QColor(255, 0, 0));
+        curveShader->use().setColor("color" ,Qt::red);
 
         core->glBindVertexArray(polyInterVAO);
         core->glLineWidth(4.0f);
         core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getPolyInterCurveDataSize());
+        core->glBindVertexArray(0);
+    }
+
+    // rbf inter
+    if(m_model.getRBFInterCurveStatus()) {
+        curveShader->use().setColor("color" ,Qt::green);
+
+        core->glBindVertexArray(RBFInterVAO);
+        core->glLineWidth(4.0f);
+        core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getRBFInterCurveDataSize());
+        core->glBindVertexArray(0);
+    }
+
+    // poly regre
+    if(m_model.getPolyRegreCurveStatus()) {
+        curveShader->use().setColor("color" ,Qt::blue);
+
+        core->glBindVertexArray(polyRegreVAO);
+        core->glLineWidth(4.0f);
+        core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getPolyRegreCurveDataSize());
+        core->glBindVertexArray(0);
+    }
+
+    // uniform param
+    if(m_model.getUniformParamCurveStatus()) {
+        curveShader->use().setColor("color" ,Qt::red);
+
+        core->glBindVertexArray(uniformParamVAO);
+        core->glLineWidth(4.0f);
+        core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getUniformParamCurveDataSize());
+        core->glBindVertexArray(0);
+    }
+
+    // chordal param
+    if(m_model.getChordalParamCurveStatus()) {
+        curveShader->use().setColor("color" ,Qt::green);
+
+        core->glBindVertexArray(chordalParamVAO);
+        core->glLineWidth(4.0f);
+        core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getChordalParamCurveDataSize());
+        core->glBindVertexArray(0);
+    }
+
+    if(m_model.getCentrietalParamCurveStatus()) {
+        curveShader->use().setColor("color" ,Qt::blue);
+
+        core->glBindVertexArray(centrietalParamVAO);
+        core->glLineWidth(4.0f);
+        core->glDrawArrays(GL_LINE_STRIP, 0, m_model.getCentrietalParamCurveDataSize());
         core->glBindVertexArray(0);
     }
 
@@ -69,12 +119,13 @@ void GLRenderer::paintGL() {
 }
 
 void GLRenderer::updatePointsBuffer() {
-    // point position and color
+    // point position
     core->glBindBuffer(GL_ARRAY_BUFFER, pointsVBO);
     core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getPointsSize(),
                        m_model.getPointsData(), GL_STATIC_DRAW);
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    // point color
     core->glBindBuffer(GL_ARRAY_BUFFER, pointsColorVBO);
     core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector3D) * m_model.getPointsSize(),
                        m_model.getColorsData(), GL_STATIC_DRAW);
@@ -86,10 +137,44 @@ void GLRenderer::updateCurveBuffer() {
 
     // update PolyInter
     m_model.updatePolyInterCurveData();
-
     core->glBindBuffer(GL_ARRAY_BUFFER, polyInterVBO);
     core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getPolyInterCurveDataSize(),
                        m_model.getPolyInterCurveData().data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // update RBF inter
+    m_model.updateRBFInterCurveData();
+    core->glBindBuffer(GL_ARRAY_BUFFER, RBFInterVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getRBFInterCurveDataSize(),
+                       m_model.getRBFInterCurveData().data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // update PolyRegre
+    m_model.updatePolyRegreCurveData();
+    core->glBindBuffer(GL_ARRAY_BUFFER, polyRegreVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getPolyRegreCurveDataSize(),
+                       m_model.getPolyRegreCurveData().data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // update Uniform param
+    m_model.updateUniformParamCurveData();
+    core->glBindBuffer(GL_ARRAY_BUFFER, uniformParamVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getUniformParamCurveDataSize(),
+                       m_model.getUniformParamCurveData().data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // update Chordal param
+    m_model.updateChordalParamCurveData();
+    core->glBindBuffer(GL_ARRAY_BUFFER, chordalParamVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getChordalParamCurveDataSize(),
+                       m_model.getChordalParamCurveData().data(), GL_STATIC_DRAW);
+    core->glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // update Centrietal param
+    m_model.updateCentrietalParamCurveData();
+    core->glBindBuffer(GL_ARRAY_BUFFER, centrietalParamVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getCentrietalParamCurveDataSize(),
+                       m_model.getCentrietalParamCurveData().data(), GL_STATIC_DRAW);
     core->glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -100,10 +185,10 @@ void GLRenderer::updateCanvas() {
 }
 
 // other functions
-void GLRenderer::setCurrentCurveType(CurveType type) {
-    m_currentCurveType = type;
-    // update something...
-}
+//void GLRenderer::setCurrentCurveType(CurveType type) {
+//    m_currentCurveType = type;
+//    // update something...
+//}
 
 void GLRenderer::initBuffers() {
     /*********** Grid **********/
@@ -156,6 +241,92 @@ void GLRenderer::initBuffers() {
                                 2 * sizeof(float), (void*) nullptr);
 
     core->glBindVertexArray(0);
+
+    /*********** RBFInter Curve **********/
+    core->glGenBuffers(1, &RBFInterVBO);
+    core->glBindBuffer(GL_ARRAY_BUFFER, RBFInterVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getRBFInterCurveDataSize(),
+                       m_model.getRBFInterCurveData().data(), GL_STATIC_DRAW);
+
+    core->glGenVertexArrays(1, &RBFInterVAO);
+    core->glBindVertexArray(RBFInterVAO);
+
+    core->glEnableVertexAttribArray(0);
+    core->glBindBuffer(GL_ARRAY_BUFFER, RBFInterVBO);
+
+    core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                                2 * sizeof(float), (void*) nullptr);
+
+    core->glBindVertexArray(0);
+
+    /*********** Polynomial Regression Curve **********/
+    core->glGenBuffers(1, &polyRegreVBO);
+    core->glBindBuffer(GL_ARRAY_BUFFER, polyRegreVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getPolyRegreCurveDataSize(),
+                       m_model.getPolyRegreCurveData().data(), GL_STATIC_DRAW);
+
+    core->glGenVertexArrays(1, &polyRegreVAO);
+    core->glBindVertexArray(polyRegreVAO);
+
+    core->glEnableVertexAttribArray(0);
+    core->glBindBuffer(GL_ARRAY_BUFFER, polyRegreVBO);
+
+    core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                                2 * sizeof(float), (void*) nullptr);
+
+    core->glBindVertexArray(0);
+
+    /*********** Uniform Param Curve **********/
+    core->glGenBuffers(1, &uniformParamVBO);
+    core->glBindBuffer(GL_ARRAY_BUFFER, uniformParamVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getUniformParamCurveDataSize(),
+                       m_model.getUniformParamCurveData().data(), GL_STATIC_DRAW);
+
+    core->glGenVertexArrays(1, &uniformParamVAO);
+    core->glBindVertexArray(uniformParamVAO);
+
+    core->glEnableVertexAttribArray(0);
+    core->glBindBuffer(GL_ARRAY_BUFFER, uniformParamVBO);
+
+    core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                                2 * sizeof(float), (void*) nullptr);
+
+    core->glBindVertexArray(0);
+
+    /*********** Chordal Param Curve **********/
+    core->glGenBuffers(1, &chordalParamVBO);
+    core->glBindBuffer(GL_ARRAY_BUFFER, chordalParamVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getChordalParamCurveDataSize(),
+                       m_model.getChordalParamCurveData().data(), GL_STATIC_DRAW);
+
+    core->glGenVertexArrays(1, &chordalParamVAO);
+    core->glBindVertexArray(chordalParamVAO);
+
+    core->glEnableVertexAttribArray(0);
+    core->glBindBuffer(GL_ARRAY_BUFFER, chordalParamVBO);
+
+    core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                                2 * sizeof(float), (void*) nullptr);
+
+    core->glBindVertexArray(0);
+
+    /*********** Polynomial Regression Curve **********/
+    core->glGenBuffers(1, &centrietalParamVBO);
+    core->glBindBuffer(GL_ARRAY_BUFFER, centrietalParamVBO);
+    core->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector2D) * m_model.getCentrietalParamCurveDataSize(),
+                       m_model.getCentrietalParamCurveData().data(), GL_STATIC_DRAW);
+
+    core->glGenVertexArrays(1, &centrietalParamVAO);
+    core->glBindVertexArray(centrietalParamVAO);
+
+    core->glEnableVertexAttribArray(0);
+    core->glBindBuffer(GL_ARRAY_BUFFER, centrietalParamVBO);
+
+    core->glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                                2 * sizeof(float), (void*) nullptr);
+
+    core->glBindVertexArray(0);
+
 }
 
 void GLRenderer::initShaders() {

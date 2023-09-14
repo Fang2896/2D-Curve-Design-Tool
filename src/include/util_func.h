@@ -19,6 +19,16 @@ public:
     static Eigen::VectorXd polynomialInterpolateCoeff(const Eigen::VectorXd &xvals,
                                                       const Eigen::VectorXd &yvals);
 
+    static Eigen::VectorXd rbfInterpolateCoeff(const float &sigma,
+                                               const Eigen::VectorXd &xvals,
+                                               const Eigen::VectorXd &yvals);
+
+    static float computeKernelGaussianValue(const float &x, const float &mean, const float &sigma);
+
+    static Eigen::VectorXd polynomialRegressionCoeff(const Eigen::VectorXd &xvals,
+                                                     const Eigen::VectorXd &yvals,
+                                                     int order, float lambda);
+
 private:
     UtilFunc() {}
 };
