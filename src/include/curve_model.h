@@ -34,6 +34,7 @@ public:
 
     // public variables
     bool isBezierMode = false;
+    int bezierContinuity = 2;
 
     void clearData();
     void setResolution(int res);
@@ -113,6 +114,7 @@ public:
 
     int getBezierCurveDataSize();
     int getBezierControlLineDataSize();
+    void setBezierContinuity(int index);
 
 private:
     // QVector<Point> m_points;

@@ -77,7 +77,9 @@ void MainWindow::switchPage(){
         m_glRenderer->updateCanvas();
     } else {
         m_model.isBezierMode = false;
+        m_model.clearData();
     }
+
 }
 
 void MainWindow::onDisplayPolyInterCurve() {
@@ -166,6 +168,11 @@ void MainWindow::onDisplayBezierControlLine(int state) {
         m_model.setBezierControlLineStatus(false);
     }
 
+    m_glRenderer->updateCanvas();
+}
+
+void MainWindow::onChangeBezierContinuity(int index) {
+    m_model.setBezierContinuity(index);
     m_glRenderer->updateCanvas();
 }
 
@@ -345,6 +352,11 @@ void MainWindow::connectSignal() {
             &QCheckBox::stateChanged,
             this,
             &MainWindow::onDisplayBezierControlLine);
+
+    connect(m_bezierContinuityComboBox,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this,
+            &MainWindow::onChangeBezierContinuity);
 
 
     // others ...

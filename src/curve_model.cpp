@@ -38,14 +38,28 @@ void CurveModel::setPointPosition(int index, QVector2D position) {
                 m_points->movePointDeltaPosition(index + 1, deltaPos);
                 m_points->movePointDeltaPosition(index - 1, deltaPos);
             }
-        } else if (index != 1 && index != m_points->getPointsSize() - 2){                // control point
-            // TODO: 根据continuity决定move行为， 目前先G0连续吧
-            int neighborIndex = index % 3 == 1 ? index - 2 : index + 2;
-            m_points->movePointDeltaPosition(neighborIndex, -1.0f * deltaPos);
-            m_points->setPointPosition(index, position);
+        } else {           // control point
+            // 不是头和尾控制点
+            if(index != 1 && index != m_points->getPointsSize() - 2){
+                int neighborIndex = index % 3 == 1 ? index - 2 : index + 2;
+                int centerIndex = index % 3 == 1 ? index - 1 : index + 1;
+                QVector2D oldNeighborPos = m_points->getIndexPosition(neighborIndex);
+                QVector2D centerPos = m_points->getIndexPosition(centerIndex);
+
+                if(bezierContinuity == 2) { // G2 连续
+                    // m_points->movePointDeltaPosition(neighborIndex, -1.0f * deltaPos);
+                    QVector2D newNeighborPos = 2.0f * centerPos - position;
+                    m_points->setPointPosition(neighborIndex, newNeighborPos);
+                } else if (bezierContinuity == 1) { // G1 连续
+                    QVector2D dir = m_points->getIndexPosition(centerIndex) - position;
+                    dir.normalize();
+                    float neighborLen = oldNeighborPos.distanceToPoint(centerPos);
+                    m_points->setPointPosition(neighborIndex, centerPos + neighborLen * dir);
+                }
+            }
         }
     }
-
+    // G0连续也包含在此
     m_points->setPointPosition(index, position);
 }
 
@@ -500,6 +514,10 @@ int CurveModel::getBezierCurveDataSize() {
 
 int CurveModel::getBezierControlLineDataSize() {
     return m_controlLineData.size();
+}
+
+void CurveModel::setBezierContinuity(int index) {
+    bezierContinuity = index;
 }
 
 

@@ -53,6 +53,7 @@ private slots:
 
     void onDisplayBezierCurve(int state);
     void onDisplayBezierControlLine(int state);
+    void onChangeBezierContinuity(int index);
 
 // private variables
 private:
