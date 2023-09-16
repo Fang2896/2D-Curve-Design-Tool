@@ -5,24 +5,21 @@
 #ifndef GRID_H
 #define GRID_H
 
-
-#include <QVector2D>
 #include <QOpenGLFunctions_4_3_Core>
+#include <QVector2D>
 
-
-class Grid
-{
-public:
+class Grid {
+   public:
     explicit Grid(int w, int h);
     ~Grid();
 
     void init();
     void drawGrid();
 
-private:
+   private:
     int width, height;
 
-    QOpenGLFunctions_4_3_Core *core;
+    QOpenGLFunctions_4_3_Core* core;
     GLuint gridVAO;
     GLuint gridVBO;
 
@@ -30,5 +27,4 @@ private:
     // QVector<QVector2D> normalizedData;
 };
 
-
-#endif //GRID_H
+#endif  //GRID_H

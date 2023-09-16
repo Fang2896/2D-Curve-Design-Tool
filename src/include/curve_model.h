@@ -5,11 +5,11 @@
 #ifndef CURVE_MODEL_H
 #define CURVE_MODEL_H
 
-#include <QVector>
 #include <QVector2D>
+#include <QVector>
 
-#include <memory>
 #include <Eigen/Dense>
+#include <memory>
 
 #include "point.h"
 #include "util_func.h"
@@ -22,12 +22,9 @@
 //};
 //
 
-class CurveModel
-{
-public:
-    CurveModel(int w, int h)
-        : width(w), height(h)
-    {
+class CurveModel {
+   public:
+    CurveModel(int w, int h) : width(w), height(h) {
         m_points = std::make_unique<Points>();
         resolution = 5000;
     }
@@ -116,7 +113,7 @@ public:
     int getBezierControlLineDataSize();
     void setBezierContinuity(int index);
 
-private:
+   private:
     // QVector<Point> m_points;
     std::unique_ptr<Points> m_points;
 
@@ -151,8 +148,6 @@ private:
     bool displayCentrietalParamCurve = false;
     bool displayBezierCurve = false;
     bool displayBezierControlLine = false;
-
 };
 
-
-#endif //CURVE_MODEL_H
+#endif  //CURVE_MODEL_H

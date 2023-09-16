@@ -2,11 +2,11 @@
 // Created by fangl on 2023/8/31.
 //
 
-
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-
 #include "mainwindow.h"
+
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
 #include "ui/ui_MainWindow.h"
 
 /***** Parameters *****/
@@ -16,13 +16,14 @@ const int OGLMANAGER_HEIGHT = 600;
 const int CURVE_DISPLAY_RANGE_WIDTH = 2000;
 const int CURVE_DISPLAY_RANGE_HEIGHT = 2000;
 
-
-MainWindow::MainWindow(QWidget *parent)
-    : QWidget(parent), ui(new Ui::MainWindow), m_model(CURVE_DISPLAY_RANGE_WIDTH, CURVE_DISPLAY_RANGE_HEIGHT)
-{
+MainWindow::MainWindow(QWidget* parent)
+    : QWidget(parent),
+      ui(new Ui::MainWindow),
+      m_model(CURVE_DISPLAY_RANGE_WIDTH, CURVE_DISPLAY_RANGE_HEIGHT) {
     ui->setupUi(this);
 
-    m_glRenderer = new GLRenderer(m_model, this, OGLMANAGER_WIDTH, OGLMANAGER_HEIGHT);
+    m_glRenderer =
+        new GLRenderer(m_model, this, OGLMANAGER_WIDTH, OGLMANAGER_HEIGHT);
 
     configureLayout();
     connectSignal();
@@ -34,15 +35,14 @@ MainWindow::MainWindow(QWidget *parent)
     this->setPalette(pal);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
 /********** slot functions *************/
 void MainWindow::onClearCanvas() {
     m_model.clearData();
-    if(m_model.isBezierMode) {
+    if (m_model.isBezierMode) {
         m_model.initBezierCurve();
     }
 
@@ -51,16 +51,16 @@ void MainWindow::onClearCanvas() {
 
 void MainWindow::updateResolution() {
     auto value = (int)m_resolutionSpinBox->value();
-    if(value < 1 || value > 100000) {
+    if (value < 1 || value > 100000) {
         qDebug() << "Resolution Value out of Range!";
         return;
     }
 
     m_model.setResolution(value);
-    m_glRenderer->updateCanvas();   // 这里需要更新buffer数据
+    m_glRenderer->updateCanvas();  // 这里需要更新buffer数据
 }
 
-void MainWindow::switchPage(){
+void MainWindow::switchPage() {
     releaseAllButtons();
 
     currentStackPage++;
@@ -69,7 +69,7 @@ void MainWindow::switchPage(){
     m_curveControlStackedWidget->setCurrentIndex(nextPageIndex);
 
     // 如果到了Bezier Page，需要进行初始化, 且设置m_model中的模式
-    if(nextPageIndex == 2) {
+    if (nextPageIndex == 2) {
         m_model.isBezierMode = true;
         m_model.initBezierCurve();
         m_displayBezierCurveCheckBox->setCheckState(Qt::Checked);
@@ -79,7 +79,6 @@ void MainWindow::switchPage(){
         m_model.isBezierMode = false;
         m_model.clearData();
     }
-
 }
 
 void MainWindow::onDisplayPolyInterCurve() {
@@ -96,58 +95,62 @@ void MainWindow::onDisplayRBFInterCurve() {
 
 void MainWindow::onUpdateRBFInterSigma() {
     auto value = (float)m_RBFSigmaSpinBox->value();
-    if(value < 0.01f || value > 500.0f) {
+    if (value < 0.01f || value > 500.0f) {
         qDebug() << "RBF Sigma Value out of Range!";
         return;
     }
 
     m_model.updateRBFInterSigma(value);
-    m_glRenderer->updateCanvas();   // 这里需要更新buffer数据
+    m_glRenderer->updateCanvas();  // 这里需要更新buffer数据
 }
 
 void MainWindow::onDisplayPolyRegreCurve() {
     m_model.setPolyRegreCurveStatus(m_polyRegreButton->isChecked());
-    qDebug() << "Polynomial Regression Status set: " << m_polyRegreButton->isChecked();
+    qDebug() << "Polynomial Regression Status set: "
+             << m_polyRegreButton->isChecked();
     m_glRenderer->update();
 }
 
 void MainWindow::onUpdatePolyRegreOrder() {
     auto value = (int)m_polyRegreOrderSpinBox->value();
-    if(value < 1 || value > 500) {
+    if (value < 1 || value > 500) {
         qDebug() << "Polynomial Regression Order Value out of Range!";
         return;
     }
 
     m_model.updatePolyRegreOrder(value);
-    m_glRenderer->updateCanvas();   // 这里需要更新buffer数据
+    m_glRenderer->updateCanvas();  // 这里需要更新buffer数据
 }
 
 void MainWindow::onUpdatePolyRegreLambda() {
     auto value = (float)m_polyRegreLambdaSpinBox->value();
-    if(value < 0.0f || value > 300.0f) {
+    if (value < 0.0f || value > 300.0f) {
         qDebug() << "Polynomial Regression Lambda Value out of Range!";
         return;
     }
 
     m_model.updatePolyRegreLambda(value);
-    m_glRenderer->updateCanvas();   // 这里需要更新buffer数据
+    m_glRenderer->updateCanvas();  // 这里需要更新buffer数据
 }
 
 void MainWindow::onDisplayUniformParamCurve() {
     m_model.setUniformParamCurveStatus(m_uniformParamButton->isChecked());
-    qDebug() << "Uniform Parametrization Status set: " << m_uniformParamButton->isChecked();
+    qDebug() << "Uniform Parametrization Status set: "
+             << m_uniformParamButton->isChecked();
     m_glRenderer->update();
 }
 
 void MainWindow::onDisplayChordalParamCurve() {
     m_model.setChordalParamCurveStatus(m_chordalParamButton->isChecked());
-    qDebug() << "Chordal Parameterization Status set: " << m_chordalParamButton->isChecked();
+    qDebug() << "Chordal Parameterization Status set: "
+             << m_chordalParamButton->isChecked();
     m_glRenderer->update();
 }
 
 void MainWindow::onDisplayCentrietalParamCurve() {
     m_model.setCentrietalParamCurveStatus(m_centrietalParamButton->isChecked());
-    qDebug() << "Centrietal Parameterization Status set: " << m_centrietalParamButton->isChecked();
+    qDebug() << "Centrietal Parameterization Status set: "
+             << m_centrietalParamButton->isChecked();
     m_glRenderer->update();
 }
 
@@ -191,7 +194,7 @@ void MainWindow::configureLayout() {
     m_resolutionLabel = ui->resolutionLabel;
 
     m_curveControlStackedWidget = ui->curveControlStackedWidget;
-    m_curveControlStackedWidget->setCurrentIndex(1);    // 初始页面为1
+    m_curveControlStackedWidget->setCurrentIndex(1);  // 初始页面为1
     m_paramPage = m_curveControlStackedWidget->widget(0);
     m_interpolationPage = m_curveControlStackedWidget->widget(1);
     m_bezierPage = m_curveControlStackedWidget->widget(2);
@@ -199,10 +202,15 @@ void MainWindow::configureLayout() {
     m_clearButton = ui->clearButton;
     m_pageSwitchButton = ui->pageSwitchPushButton;
 
-    m_polyInterButton = m_curveControlStackedWidget->findChild<QPushButton*>("polyInterPushButton");
-    m_uniformParamButton = m_curveControlStackedWidget->findChild<QPushButton*>("uniformParamPushButton");
-    m_chordalParamButton = m_curveControlStackedWidget->findChild<QPushButton*>("chordalParamPushButton");
-    m_centrietalParamButton = m_curveControlStackedWidget->findChild<QPushButton*>("centrietalParamPushButton");
+    m_polyInterButton = m_curveControlStackedWidget->findChild<QPushButton*>(
+        "polyInterPushButton");
+    m_uniformParamButton = m_curveControlStackedWidget->findChild<QPushButton*>(
+        "uniformParamPushButton");
+    m_chordalParamButton = m_curveControlStackedWidget->findChild<QPushButton*>(
+        "chordalParamPushButton");
+    m_centrietalParamButton =
+        m_curveControlStackedWidget->findChild<QPushButton*>(
+            "centrietalParamPushButton");
 
     m_RBFInterButton = ui->RBFPushButton;
     m_polyRegreButton = ui->polyRegrePushButton;
@@ -282,82 +290,62 @@ void MainWindow::configureLayout() {
 
 void MainWindow::connectSignal() {
     // clear
-    connect(m_clearButton,
-            &QPushButton::clicked,
-            this,
+    connect(m_clearButton, &QPushButton::clicked, this,
             &MainWindow::onClearCanvas);
 
-    connect(m_resolutionSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-            this, &MainWindow::updateResolution);
+    connect(m_resolutionSpinBox,
+            QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+            &MainWindow::updateResolution);
 
     // QStackedWidget Switch and Clear Data
-    connect(m_curveControlStackedWidget,
-            &QStackedWidget::currentChanged,
-            this,
+    connect(m_curveControlStackedWidget, &QStackedWidget::currentChanged, this,
             &MainWindow::onClearCanvas);
 
-    connect(m_pageSwitchButton,
-            &QPushButton::clicked,
-            this,
+    connect(m_pageSwitchButton, &QPushButton::clicked, this,
             &MainWindow::switchPage);
 
-    connect(m_polyInterButton,
-            &QPushButton::toggled,
-            this,
+    connect(m_polyInterButton, &QPushButton::toggled, this,
             &MainWindow::onDisplayPolyInterCurve);
 
-    connect(m_RBFInterButton,
-            &QPushButton::toggled,
-            this,
+    connect(m_RBFInterButton, &QPushButton::toggled, this,
             &MainWindow::onDisplayRBFInterCurve);
 
     // change RBF interpolation sigma
-    connect(m_RBFSigmaSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-            this, &MainWindow::onUpdateRBFInterSigma);
+    connect(m_RBFSigmaSpinBox,
+            QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+            &MainWindow::onUpdateRBFInterSigma);
 
-    connect(m_polyRegreButton,
-            &QPushButton::toggled,
-            this,
+    connect(m_polyRegreButton, &QPushButton::toggled, this,
             &MainWindow::onDisplayPolyRegreCurve);
 
     // Polynomial Regression
-    connect(m_polyRegreOrderSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-            this, &MainWindow::onUpdatePolyRegreOrder);
+    connect(m_polyRegreOrderSpinBox,
+            QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+            &MainWindow::onUpdatePolyRegreOrder);
 
-    connect(m_polyRegreLambdaSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-            this, &MainWindow::onUpdatePolyRegreLambda);
+    connect(m_polyRegreLambdaSpinBox,
+            QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+            &MainWindow::onUpdatePolyRegreLambda);
 
     // Parameterization Curve
-    connect(m_uniformParamButton,
-            &QPushButton::toggled,
-            this,
+    connect(m_uniformParamButton, &QPushButton::toggled, this,
             &MainWindow::onDisplayUniformParamCurve);
 
-    connect(m_chordalParamButton,
-            &QPushButton::toggled,
-            this,
+    connect(m_chordalParamButton, &QPushButton::toggled, this,
             &MainWindow::onDisplayChordalParamCurve);
 
-    connect(m_centrietalParamButton,
-            &QPushButton::toggled,
-            this,
+    connect(m_centrietalParamButton, &QPushButton::toggled, this,
             &MainWindow::onDisplayCentrietalParamCurve);
 
-    connect(m_displayBezierCurveCheckBox,
-            &QCheckBox::stateChanged,
-            this,
+    connect(m_displayBezierCurveCheckBox, &QCheckBox::stateChanged, this,
             &MainWindow::onDisplayBezierCurve);
 
-    connect(m_displayBezierControlLineCheckBox,
-            &QCheckBox::stateChanged,
-            this,
+    connect(m_displayBezierControlLineCheckBox, &QCheckBox::stateChanged, this,
             &MainWindow::onDisplayBezierControlLine);
 
     connect(m_bezierContinuityComboBox,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this,
+            QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &MainWindow::onChangeBezierContinuity);
-
 
     // others ...
 }
@@ -375,4 +363,3 @@ void MainWindow::releaseAllButtons() {
     m_displayBezierCurveCheckBox->setCheckState(Qt::Unchecked);
     m_displayBezierControlLineCheckBox->setCheckState(Qt::Unchecked);
 }
-

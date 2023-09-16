@@ -5,16 +5,14 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <QDebug>
 #include <QColor>
-#include <QOpenGLWidget>
+#include <QDebug>
 #include <QOpenGLShaderProgram>
+#include <QOpenGLWidget>
 
-
-class Shader
-{
-public:
-    explicit Shader(QOpenGLWidget *parent);
+class Shader {
+   public:
+    explicit Shader(QOpenGLWidget* parent);
     ~Shader() = default;
 
     void compile(const QString& vertexSource, const QString& fragmentSource);
@@ -24,9 +22,7 @@ public:
         return *this;
     }
 
-    void release() {
-        shaderProgram->release();
-    }
+    void release() { shaderProgram->release(); }
 
     void setFloat(const QString& name, const GLfloat& value) {
         int loc = shaderProgram->uniformLocation(name);
@@ -48,7 +44,8 @@ public:
         shaderProgram->setUniformValue(loc, value);
     }
 
-    void setVector3f(const QString& name, const GLfloat& x, const GLfloat& y, const GLfloat& z) {
+    void setVector3f(const QString& name, const GLfloat& x, const GLfloat& y,
+                     const GLfloat& z) {
         int loc = shaderProgram->uniformLocation(name);
         shaderProgram->setUniformValue(loc, QVector3D(x, y, z));
     }
@@ -58,7 +55,8 @@ public:
         shaderProgram->setUniformValue(loc, value);
     }
 
-    void setVector4f(const QString& name, const GLfloat& x, const GLfloat& y, const GLfloat& z, const GLfloat& w) {
+    void setVector4f(const QString& name, const GLfloat& x, const GLfloat& y,
+                     const GLfloat& z, const GLfloat& w) {
         int loc = shaderProgram->uniformLocation(name);
         shaderProgram->setUniformValue(loc, QVector4D(x, y, z, w));
     }
@@ -82,9 +80,9 @@ public:
         int loc = shaderProgram->uniformLocation(name);
         shaderProgram->setUniformValue(loc, value);
     }
-private:
-    QOpenGLShaderProgram *shaderProgram;
+
+   private:
+    QOpenGLShaderProgram* shaderProgram;
 };
 
-
-#endif //SHADER_H
+#endif  //SHADER_H

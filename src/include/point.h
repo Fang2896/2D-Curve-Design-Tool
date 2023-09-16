@@ -5,32 +5,27 @@
 #ifndef POINT_H
 #define POINT_H
 
-#include <QVector>
 #include <QVector2D>
 #include <QVector3D>
+#include <QVector>
 
 #include <utility>
 
-
-class Point
-{
-public:
+class Point {
+   public:
     // 颜色和size留到后面来实现
     Point(const QVector2D& position, QVector3D color, float size)
-        : id(nextID++) ,m_position(position), m_color(color), m_size(size) { }
+        : id(nextID++), m_position(position), m_color(color), m_size(size) {}
 
     explicit Point(const QVector2D& position)
-        : id(nextID++), m_position(position)
-    {
+        : id(nextID++), m_position(position) {
         m_color = {1.0f, 1.0f, 1.0f};
         m_size = 1.0f;
     }
 
     int getID() const;
 
-    static void resetID() {
-        nextID = 0;
-    }
+    static void resetID() { nextID = 0; }
 
     // getter and setter for position
     QVector2D getPosition() const;
@@ -46,19 +41,18 @@ public:
 
     bool operator==(const Point& other) const;
 
-private:
+   private:
     int id;
     static inline int nextID = 0;
 
     QVector2D m_position;
     QVector3D m_color = {1.0f, 1.0f, 1.0f};
-    float m_size;   // display size
+    float m_size;  // display size
 };
 
 // 管理所有Point，以及相应的数据
-class Points
-{
-public:
+class Points {
+   public:
     void clearData();
 
     const QVector<Point>& getPoints() const;
@@ -78,11 +72,11 @@ public:
 
     void setPointColor(int index, QVector3D pointColor);
 
-private:
+   private:
     // 这两个数据一定要同步！
     QVector<Point> m_points;
     QVector<QVector2D> m_pointsData;
     QVector<QVector3D> m_colorsData;
 };
 
-#endif //POINT_H
+#endif  //POINT_H

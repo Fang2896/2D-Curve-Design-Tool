@@ -6,43 +6,40 @@
 #define GL_RENDERER_H
 
 #include <QMouseEvent>
-#include <QOpenGLWidget>
 #include <QOpenGLFunctions_4_3_Core>
+#include <QOpenGLWidget>
 
 #include "curve_model.h"
 #include "shader.h"
 
 #include "grid.h"
 
-
-class GLRenderer : public QOpenGLWidget
-{
+class GLRenderer : public QOpenGLWidget {
     Q_OBJECT
-public:
-    explicit GLRenderer(CurveModel &model, QWidget* parent = nullptr,
+   public:
+    explicit GLRenderer(CurveModel& model, QWidget* parent = nullptr,
                         int width = 800, int height = 400);
 
-//    void setCurrentCurveType(CurveType type);
+    //    void setCurrentCurveType(CurveType type);
     void updateCanvas();
 
-
-protected:
+   protected:
     void initializeGL() override;
     void paintGL() override;
     void resizeGL(int width, int height) override;
 
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
-// variables
-private:
-    CurveModel &m_model;
+    // variables
+   private:
+    CurveModel& m_model;
     // CurveType m_currentCurveType;
 
     std::unique_ptr<Grid> m_grid;
 
-    QOpenGLFunctions_4_3_Core *core;
+    QOpenGLFunctions_4_3_Core* core;
 
     // VAOs, VBOs
     GLuint pointsVAO;
@@ -78,18 +75,16 @@ private:
     std::unique_ptr<Shader> curveShader;
 
     // utils variables
-    int selectedPointIndex = -1;    // 点的id就是index
+    int selectedPointIndex = -1;  // 点的id就是index
 
-// private function
-private:
+    // private function
+   private:
     void initBuffers();
     void initShaders();
     void updateViewProjectMatrix();
 
     void updatePointsBuffer();
     void updateCurveBuffer();
-
 };
 
-
-#endif //GL_RENDERER_H
+#endif  //GL_RENDERER_H
