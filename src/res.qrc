@@ -2,11 +2,67 @@
     <qresource prefix="/">
         <file>resources/shaders/point.vert</file>
         <file>resources/shaders/point.frag</file>
-
         <file>resources/shaders/grid.vert</file>
         <file>resources/shaders/grid.frag</file>
-
         <file>resources/shaders/curve.vert</file>
         <file>resources/shaders/curve.frag</file>
+        <file>resources/qss/materialDark.css</file>
+        <file>resources/qss/flatwhite.css</file>
+        <file>resources/qss/lightblue.css</file>
+        <file>resources/qss/psblack.css</file>
+        <file>resources/qss/flatwhite/add_bottom.png</file>
+        <file>resources/qss/flatwhite/add_left.png</file>
+        <file>resources/qss/flatwhite/add_right.png</file>
+        <file>resources/qss/flatwhite/add_top.png</file>
+        <file>resources/qss/flatwhite/branch_close.png</file>
+        <file>resources/qss/flatwhite/branch_open.png</file>
+        <file>resources/qss/flatwhite/calendar_nextmonth.png</file>
+        <file>resources/qss/flatwhite/calendar_prevmonth.png</file>
+        <file>resources/qss/flatwhite/checkbox_checked.png</file>
+        <file>resources/qss/flatwhite/checkbox_checked_disable.png</file>
+        <file>resources/qss/flatwhite/checkbox_parcial.png</file>
+        <file>resources/qss/flatwhite/checkbox_parcial_disable.png</file>
+        <file>resources/qss/flatwhite/checkbox_unchecked.png</file>
+        <file>resources/qss/flatwhite/checkbox_unchecked_disable.png</file>
+        <file>resources/qss/flatwhite/radiobutton_checked.png</file>
+        <file>resources/qss/flatwhite/radiobutton_checked_disable.png</file>
+        <file>resources/qss/flatwhite/radiobutton_unchecked.png</file>
+        <file>resources/qss/flatwhite/radiobutton_unchecked_disable.png</file>
+        <file>resources/qss/lightblue/add_bottom.png</file>
+        <file>resources/qss/lightblue/add_left.png</file>
+        <file>resources/qss/lightblue/add_right.png</file>
+        <file>resources/qss/lightblue/add_top.png</file>
+        <file>resources/qss/lightblue/branch_close.png</file>
+        <file>resources/qss/lightblue/branch_open.png</file>
+        <file>resources/qss/lightblue/calendar_nextmonth.png</file>
+        <file>resources/qss/lightblue/calendar_prevmonth.png</file>
+        <file>resources/qss/lightblue/checkbox_checked.png</file>
+        <file>resources/qss/lightblue/checkbox_checked_disable.png</file>
+        <file>resources/qss/lightblue/checkbox_parcial.png</file>
+        <file>resources/qss/lightblue/checkbox_parcial_disable.png</file>
+        <file>resources/qss/lightblue/checkbox_unchecked.png</file>
+        <file>resources/qss/lightblue/checkbox_unchecked_disable.png</file>
+        <file>resources/qss/lightblue/radiobutton_checked.png</file>
+        <file>resources/qss/lightblue/radiobutton_checked_disable.png</file>
+        <file>resources/qss/lightblue/radiobutton_unchecked.png</file>
+        <file>resources/qss/lightblue/radiobutton_unchecked_disable.png</file>
+        <file>resources/qss/psblack/add_bottom.png</file>
+        <file>resources/qss/psblack/add_left.png</file>
+        <file>resources/qss/psblack/add_right.png</file>
+        <file>resources/qss/psblack/add_top.png</file>
+        <file>resources/qss/psblack/branch_close.png</file>
+        <file>resources/qss/psblack/branch_open.png</file>
+        <file>resources/qss/psblack/calendar_nextmonth.png</file>
+        <file>resources/qss/psblack/calendar_prevmonth.png</file>
+        <file>resources/qss/psblack/checkbox_checked.png</file>
+        <file>resources/qss/psblack/checkbox_checked_disable.png</file>
+        <file>resources/qss/psblack/checkbox_parcial.png</file>
+        <file>resources/qss/psblack/checkbox_parcial_disable.png</file>
+        <file>resources/qss/psblack/checkbox_unchecked.png</file>
+        <file>resources/qss/psblack/checkbox_unchecked_disable.png</file>
+        <file>resources/qss/psblack/radiobutton_checked.png</file>
+        <file>resources/qss/psblack/radiobutton_checked_disable.png</file>
+        <file>resources/qss/psblack/radiobutton_unchecked.png</file>
+        <file>resources/qss/psblack/radiobutton_unchecked_disable.png</file>
     </qresource>
 </RCC>

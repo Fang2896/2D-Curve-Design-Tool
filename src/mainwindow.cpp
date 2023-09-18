@@ -30,9 +30,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     QPalette pal(this->palette());
 
-    pal.setColor(QPalette::Window, QColor(99, 103, 106));
-    this->setAutoFillBackground(true);
-    this->setPalette(pal);
+    //    pal.setColor(QPalette::Window, QColor(99, 103, 106));
+    //    this->setAutoFillBackground(true);
+    //    this->setPalette(pal);
 }
 
 MainWindow::~MainWindow() {
@@ -282,8 +282,8 @@ void MainWindow::configureLayout() {
     vDashLayout->addWidget(m_clearButton);
 
     auto mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(m_glRenderer, 5);
     mainLayout->addLayout(vDashLayout, 1);
+    mainLayout->addWidget(m_glRenderer, 5);
 
     this->setLayout(mainLayout);
 }
